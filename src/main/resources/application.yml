@@ -1,0 +1,11 @@
+spring:
+  profiles.active: local
+  
+  thymeleaf:
+    enabled: true
+    cache: true
+      
+server:
+   port: 8080
+   context-path: /spplogin
+   
