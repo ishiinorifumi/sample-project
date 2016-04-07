@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>エラー</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap-umi.min.css}"
+	href="../../static/css/bootstrap-umi.min.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-10 col-xs-offset-1 text-center">
+				<h3 class="text-danger">処理中にエラーが発生しました。</h3	>
+				<p class="text-danger" th:if="${errorCode != null}" th:text="${errorCode} + '：' + ${errorMessage}" />
+				<p>お客様にはご迷惑をおかけし申し訳ございませんが、 <a th:href="@{/spplogin}" href="/index.html">最初</a>から操作をやり直してください。</p>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
+		src="../../static/js/lib/bootstrap-umi.min.js"></script>
+	<script th:src="@{/js/lib/jquery-2.2.3.min.js}"
+		src="../../static/js/lib/jquery-2.2.3.min.js"></script>
+</body>
+</html>
