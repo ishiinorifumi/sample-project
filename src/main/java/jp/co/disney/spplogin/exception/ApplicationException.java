@@ -1,5 +1,9 @@
 package jp.co.disney.spplogin.exception;
 
+import java.text.MessageFormat;
+
+import lombok.Getter;
+
 /**
  * アプリケーション共通の例外クラス
  *
@@ -7,34 +11,33 @@ package jp.co.disney.spplogin.exception;
 public class ApplicationException extends RuntimeException {
 
 	/** serialVersionUID */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7643484724071537827L;
 
-	private String  errorCode;
+	@Getter
+	private ApplicationErrors error;
+	@Getter
+	private Throwable cause;
+	@Getter
+	private Object[] args;
 	
-	private String errorMessage;
-	
-	public ApplicationException(String errorCode, String errorMessage) {
-		this.errorCode = errorCode;
-		this.errorMessage = errorMessage;
+	public ApplicationException(ApplicationErrors error) {
+		this.error = error;
 	}
 	
-	/**
-	 * 画面表示用のエラーコードを取得する。
-	 * 
-	 * @return エラーコード
-	 */
-	public String getDispErrorCode() {
-		return errorCode;
+	public ApplicationException(ApplicationErrors error, Throwable cause) {
+		this.error = error;
+		this.cause = cause;
 	}
 	
-	/**
-	 * 画面表示用のエラーメッセージを取得する。
-	 * 
-	 * 
-	 * @return エラーメッセージ
-	 */
-	public String getDispErrorMessage() {
-		return errorMessage;
+	public ApplicationException(ApplicationErrors error, String... args) {
+		this.error = error;
+		this.args = args;
+	}
+	
+	public ApplicationException(ApplicationErrors error, Throwable cause, String... args) {
+		this.error = error;
+		this.cause = cause;
+		this.args = args;
 	}
 	
 }
