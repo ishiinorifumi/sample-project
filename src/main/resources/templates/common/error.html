@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <title>エラー</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/bootstrap-umi.min.css}"
 	href="../../static/css/bootstrap-umi.min.css" />
@@ -10,16 +12,25 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-10 col-xs-offset-1 text-center">
-				<h3 class="text-danger">処理中にエラーが発生しました。</h3	>
-				<p class="text-danger" th:if="${errorMessage != null}" th:text="${errorMessage}" />
-				<p>お客様にはご迷惑をおかけし申し訳ございませんが、 <a th:href="@{/spplogin}" href="/index.html">最初</a>から操作をやり直してください。</p>
+			<div class="col-xs-12">
+				<p class="text-danger" th:if="${errorMessage != null}" th:text="${errorMessage}">エラーが発生しました。<br>(SPC-001)</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p>上記をご確認いただき、ご不明点などございましたら、下記窓口までお電話でご連絡ください。</p>
+				<p><span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>ディズニー・インターネットサービス・カスタマーセンター</p>
+				<div>0570-66-6745</div>
+				<div>営業時間：月-金 10:00-17:00</div>
+				<div>（土・日・祝日・年末年始を除く）</div>
+				<div>※PHS・一部のIP電話・国際電話からは</div>
+				<div>045-226-3326</div>
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
-		src="../../static/js/lib/bootstrap-umi.min.js"></script>
 	<script th:src="@{/js/lib/jquery-2.2.3.min.js}"
 		src="../../static/js/lib/jquery-2.2.3.min.js"></script>
+	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
+		src="../../static/js/lib/bootstrap-umi.min.js"></script>
 </body>
 </html>

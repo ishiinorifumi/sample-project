@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<html lang="jp" xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorator="layout"
->
+<html lang="jp" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>ログイン／新規登録</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,12 +9,105 @@
 	href="../../static/css/bootstrap-umi.min.css" />
 </head>
 <body>
-<div layout:fragment="content">
-	<h3 class="text-danger">ログイン／新規登録</h3>
+<div class="container">
+	<div class="row" style="margin-top:20px;">
+		<div class="col-xs-12">
+			<p>ディズニーハッピールームを利用するためには、メンバーログインが必要です。</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<h3>メンバーログイン</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="form-group">
+				<input type="text" class="form-control" id="emailOrMemberName" placeholder="メールアドレスまたはメンバー名" />
+				<input type="password" class="form-control" id="password" placeholder="パスワード" />
+			</div>
+			<div>・メールアドレス／メンバー名もしくはパスワードは、現在ご利用中のスマートフォンで登録されたメンバー登録情報を入力ください。</div>
+			<div>・メンバー名はご登録完了メールにも記載されています。</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="center-block" style="width:200px;">
+				<div><a href="#"><span class="glyphicon glyphicon-question-sign"></span>パスワードを忘れた方</a></div>
+				<div><a href="#"><span class="glyphicon glyphicon-question-sign"></span>メンバー名を忘れた方</a></div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin-top:10px;">
+		<div class="col-xs-12">
+			<button type="button" class="btn btn-block btn-primary">ログイン</button>
+			<button type="button" class="btn btn-block btn-info">設定はこちらから</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<hr/>
+			<p>メンバー登録がお済でない方は生年月日を入力して、「はじめて登録される方はこちら」をタップしてください。</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<strong>生年月日</strong>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">
+			<select class="form-control" id="sel1">
+			    <option>1989年</option>
+			    <option>2002年</option>
+			    <option>2003年</option>
+			    <option>2004年</option>
+			</select>
+		</div>
+		<div class="col-xs-3" style="padding-left:0;">
+			<select class="form-control" id="sel2" style="padding-left:5px; padding-right:0;">
+			    <option>12月</option>
+			    <option>2月</option>
+			    <option>3月</option>
+			    <option>4月</option>
+			</select>
+		</div>
+		<div class="col-xs-3"  style="padding-left:0;">
+			<select class="form-control" id="sel2" style="padding-left:5px; padding-right:0;">
+			    <option>31日</option>
+			    <option>2日</option>
+			    <option>3日</option>
+			    <option>4日</option>
+			</select>
+		</div>
+	</div>
+	<div class="row" style="margin-top:20px;">
+		<div class="col-xs-12">
+			<button type="button" class="btn btn-block btn-info">はじめて登録される方はこちら</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-center">
+				<a href="#"><span class="glyphicon glyphicon-question-sign"></span>ディズニー公式スマートフォンメンバーとは</a>
+		</div>
+	</div>
+	<div class="row">
+		<hr/>
+		<div class="col-xs-12">
+			<p>以下のサービスを利用している方は、下記から利用してください。 </p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<button type="button" class="btn btn-block btn-info">ディスニーマーケットを利用する</button>
+			<button type="button" class="btn btn-block btn-info">ディズニーパスを利用する</button>
+		</div>
+	</div>
 </div>
-	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
-		src="../../static/js/lib/bootstrap-umi.min.js"></script>
 	<script th:src="@{/js/lib/jquery-2.2.3.min.js}"
 		src="../../static/js/lib/jquery-2.2.3.min.js"></script>
+	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
+		src="../../static/js/lib/bootstrap-umi.min.js"></script>
+
 </body>
 </html>
