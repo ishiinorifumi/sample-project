@@ -1,7 +1,5 @@
 package jp.co.disney.spplogin.exception;
 
-import java.text.MessageFormat;
-
 import lombok.Getter;
 
 /**

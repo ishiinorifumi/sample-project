@@ -5,7 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
+/***
+ * 共通コントローラー
+ *
+ */
 @Controller
 public class CommonController {
 	@RequestMapping(value="/maintenance", method=RequestMethod.GET)

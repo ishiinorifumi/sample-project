@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+div.error-message-area {
+	display: table-cell;    
+    vertical-align: middle;
+	height:100px;
+	width:1000px;
+	background-image: url("../img/warning.png");
+	background-repeat: no-repeat;
+	background-size: 50px;
+	background-position:15px center;
+	border: solid 1px #FF99FF;
+	background-color: #FFCCFF;
+	padding:10px 10px 10px 80px;
+}

@@ -12,12 +12,16 @@ import jp.co.disney.spplogin.exception.ApplicationErrors;
 import jp.co.disney.spplogin.exception.ApplicationException;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 共通例外ハンドリング
+ *
+ */
 @Slf4j
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
     @ExceptionHandler(ApplicationException.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ModelAndView handleApplicationException(ApplicationException ex) {
         return handleError(ex.getError(), ex, ex.getArgs());
 	}
@@ -39,6 +43,7 @@ public class ExceptionControllerAdvice {
 		log.error(message, ex);
 		
     	return new ModelAndView("common/error")
+    			.addObject("errorCode", error.getCode())
         		.addObject("errorMessage", message);
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * エラーページコントローラー
- * @author z2h7273
  *
  */
 @Controller

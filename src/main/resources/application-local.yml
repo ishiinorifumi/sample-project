@@ -1,3 +1,4 @@
+# Thymeleaf
 spring:
   thymeleaf:
     cache: false

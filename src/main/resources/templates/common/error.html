@@ -8,23 +8,38 @@
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/bootstrap-umi.min.css}"
 	href="../../static/css/bootstrap-umi.min.css" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/main.css}"
+	href="../../static/css/main.css" />
 </head>
 <body>
 	<div class="container">
-		<div class="row">
+		<div class="row" style="margin-top:20px;">
 			<div class="col-xs-12">
-				<p class="text-danger" th:if="${errorMessage != null}" th:text="${errorMessage}">エラーが発生しました。<br>(SPC-001)</p>
+					<div class="error-message-area" th:if="${errorMessage != null}">
+						<p>
+							<span th:text="${errorMessage}">エラーが発生しました。</span><br/>
+							<span th:text="'（' + ${errorCode} + '）'"></span>
+						</p>
+					</div>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" style="margin-top:20px;">
 			<div class="col-xs-12">
 				<p>上記をご確認いただき、ご不明点などございましたら、下記窓口までお電話でご連絡ください。</p>
-				<p><span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>ディズニー・インターネットサービス・カスタマーセンター</p>
-				<div>0570-66-6745</div>
-				<div>営業時間：月-金 10:00-17:00</div>
-				<div>（土・日・祝日・年末年始を除く）</div>
-				<div>※PHS・一部のIP電話・国際電話からは</div>
-				<div>045-226-3326</div>
+				<address>
+					<span class="glyphicon glyphicon-earphone" aria-hidden="true" style="padding-right:5px;"></span>ディズニー・インターネットサービス・カスタマーセンター<br/>
+					0570-66-6745<br/>
+					営業時間：月－金 10:00－17:00<br/>
+					（土・日・祝日・年末年始を除く）<br/>
+					※PHS・一部のIP電話・国際電話からは<br/>
+					045-226-3326
+				</address>
+			</div>
+		</div>
+		<div class="row" style="margin-top:10px;">
+			<div class="col-xs-12">
+				<button type="button" class="btn btn-block btn-info">もどる</button>
 			</div>
 		</div>
 	</div>
