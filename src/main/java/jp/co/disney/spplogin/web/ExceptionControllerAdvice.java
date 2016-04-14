@@ -13,7 +13,7 @@ import jp.co.disney.spplogin.exception.ApplicationException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 共通例外ハンドリング
+ * 共通例外ハンドラー
  *
  */
 @Slf4j

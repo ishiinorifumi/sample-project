@@ -11,12 +11,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Controller
 public class CommonController {
+	/**
+	 * メンテナンスページ
+	 * @return
+	 */
 	@RequestMapping(value="/maintenance", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public String maintenance() {
 		return "common/maintenance";
 	}
-	
+
+	/**
+	 * サービス提供対象外端末アクセス時の
+	 * @return
+	 */
 	@RequestMapping(value="/unsupported", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public String  unsupportedModel() {
