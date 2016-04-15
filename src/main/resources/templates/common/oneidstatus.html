@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>メンテナンスページ</title>
 <meta charset="utf-8" />
+<title>エラー</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
 	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
@@ -13,17 +14,23 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col-xs-12 text-center">
-				<h4 class="text-info"><strong>システムメンテナンスのお知らせ</strong></h4>
+		<div class="row" style="margin-top:20px;">
+			<div class="col-xs-12">
+					<div class="error-message-area">
+						<p>
+						アカウントの状態に問題があります。引き続きサービスを利用するためには、以下のページをご参照いただき、必要なリカバリを実施してください。
+						</p>
+					</div>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" style="margin-top:20px;">
 			<div class="col-xs-12">
-				<p>
-				現在、システムメンテナンス実施中のためサービスをご利用いただけません。
-				お客様にはご迷惑をおかけし申し訳ございませんが、 今しばらくお待ち 下さい。
-				</p>
+				<button type="button" class="btn btn-info btn-block">アカウントリカバリはこちら</button>
+			</div>
+		</div>
+		<div class="row" style="margin-top:20px;">
+			<div class="col-xs-12">
+				<div th:include="fragment/customerCenterAddress :: content"></div>
 			</div>
 		</div>
 	</div>

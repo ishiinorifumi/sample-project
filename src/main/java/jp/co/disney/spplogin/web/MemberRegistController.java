@@ -11,4 +11,14 @@ public class MemberRegistController {
 	public String entry() {
 		return "memberregist/entry";
 	}
+	
+	@RequestMapping("/confirm")
+	public String confirm() {
+		return "memberregist/confirm";
+	}
+	
+	@RequestMapping("/complete")
+	public String complete() {
+		return "memberregist/complete";
+	}
 }

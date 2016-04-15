@@ -6,8 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
 <link rel="stylesheet" type="text/css"
-	th:href="@{/css/bootstrap-umi.min.css}"
-	href="../../static/css/bootstrap-umi.min.css" />
+	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
+	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/main.css}"
 	href="../../static/css/main.css" />
@@ -26,15 +26,7 @@
 		</div>
 		<div class="row" style="margin-top:20px;">
 			<div class="col-xs-12">
-				<p>上記をご確認いただき、ご不明点などございましたら、下記窓口までお電話でご連絡ください。</p>
-				<address>
-					<span class="glyphicon glyphicon-earphone" aria-hidden="true" style="padding-right:5px;"></span>ディズニー・インターネットサービス・カスタマーセンター<br/>
-					0570-66-6745<br/>
-					営業時間：月－金 10:00－17:00<br/>
-					（土・日・祝日・年末年始を除く）<br/>
-					※PHS・一部のIP電話・国際電話からは<br/>
-					045-226-3326
-				</address>
+				<div th:include="fragment/customerCenterAddress :: content"></div>
 			</div>
 		</div>
 		<div class="row" style="margin-top:10px;">
@@ -43,9 +35,9 @@
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/js/lib/jquery-2.2.3.min.js}"
-		src="../../static/js/lib/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
-		src="../../static/js/lib/bootstrap-umi.min.js"></script>
+	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
+		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
+	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
+		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>

@@ -13,3 +13,43 @@ div.error-message-area {
 	background-color: #FFCCFF;
 	padding:10px 10px 10px 80px;
 }
+
+div.info-area {
+	border:1px solid #D3D3D3;
+	border-radius:10px;
+	background-color:#E6E6FA;
+	padding:10px 0;
+}
+
+input[type="radio"] {
+    position: relative;
+    -webkit-appearance: button;
+    appearance: button;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 24px;
+    height: 24px;
+    content: "";
+    background-color: #FFFFFF;
+    border: 1px solid #999999;
+    -webkit-border-radius: 24px;
+    border-radius: 24px;
+    -webkit-box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2);
+    box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2);
+    vertical-align: -7px;
+    cursor: pointer;
+}
+
+input[type="radio"]:checked:after {
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    content: "";
+    width: 12px;
+    height: 12px;
+    background: #00BFFF;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+}
+

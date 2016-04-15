@@ -15,14 +15,14 @@ public class CommonController {
 	 * メンテナンスページ
 	 * @return
 	 */
-	@RequestMapping(value="/maintenance", method=RequestMethod.GET)
+	@RequestMapping(value="/Maintenance", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public String maintenance() {
 		return "common/maintenance";
 	}
 
 	/**
-	 * サービス提供対象外端末アクセス時の
+	 * サービス提供対象外端末アクセス時のエラー画面
 	 * @return
 	 */
 	@RequestMapping(value="/unsupported", method=RequestMethod.GET)
@@ -30,4 +30,14 @@ public class CommonController {
 	public String  unsupportedModel() {
 		return "common/unsupportedModel";
 	}
+	
+	/**
+	 * OneIDアカウント状態表示画面
+	 * @return
+	 */
+	@RequestMapping(value="/OneidStatus", method=RequestMethod.GET)
+	public String oneidStatus() {
+		return "common/oneidstatus";
+	}
+	
 }

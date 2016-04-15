@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
 <link rel="stylesheet" type="text/css"
-	th:href="@{/css/bootstrap-umi.min.css}"
-	href="../../static/css/bootstrap-umi.min.css" />
+	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
+	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/main.css}"
+	href="../../static/css/main.css" />
 </head>
 <body>
 	<div class="container">
@@ -19,7 +22,7 @@
 		</div>
 		<div class="row" style="margin-top:10px;">
 			<div class="col-xs-12">
-				<button type="button" class="btn btn-block btn-info">空メール送信</button>
+				<button type="button" class="btn btn-lg btn-block btn-info">空メール送信</button>
 			</div>
 		</div>
 		<hr/>
@@ -40,15 +43,14 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 text-center" style="border:1px solid #D3D3D3; border-radius:10px;">
+			<div class="col-xs-12 text-center" style="border:1px solid #D3D3D3; border-radius:10px; ">
 				<p style="height:50px; line-height:50px;">disney.jp</p>
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/js/lib/jquery-2.2.3.min.js}"
-		src="../../static/js/lib/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
-		src="../../static/js/lib/bootstrap-umi.min.js"></script>
-
+	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
+		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
+	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
+		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>

@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
 <link rel="stylesheet" type="text/css"
-	th:href="@{/css/bootstrap-umi.min.css}"
-	href="../../static/css/bootstrap-umi.min.css" />
+	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
+	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/main.css}"
+	href="../../static/css/main.css" />
 </head>
 <body>
 <div class="container">
@@ -40,8 +43,8 @@
 	</div>
 	<div class="row" style="margin-top:10px;">
 		<div class="col-xs-12">
-			<button type="button" class="btn btn-block btn-primary">ログイン</button>
-			<button type="button" class="btn btn-block btn-info">設定はこちらから</button>
+			<button type="button" class="btn btn-lg btn-block btn-primary">ログイン</button>
+			<button type="button" class="btn btn-lg btn-block btn-info">設定はこちらから</button>
 		</div>
 	</div>
 	<div class="row">
@@ -57,27 +60,59 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-6">
-			<select class="form-control" id="sel1">
-			    <option>1989年</option>
-			    <option>2002年</option>
-			    <option>2003年</option>
-			    <option>2004年</option>
+			<select class="form-control" id="birthday-year">
+			    <option th:each="year : ${barthdayYears}" th:text="${year}+'年'" th:value="${year}">1989年</option>
 			</select>
 		</div>
 		<div class="col-xs-3" style="padding-left:0;">
-			<select class="form-control" id="sel2" style="padding-left:5px; padding-right:0;">
-			    <option>12月</option>
-			    <option>2月</option>
-			    <option>3月</option>
-			    <option>4月</option>
+			<select class="form-control" id="birthday-month" style="padding-left:5px; padding-right:0;">
+				<option value="1">1月</option>
+				<option value="2">2月</option>
+				<option value="3">3月</option>
+				<option value="4">4月</option>
+				<option value="5">5月</option>
+				<option value="6">6月</option>
+				<option value="7">7月</option>
+				<option value="8">8月</option>
+				<option value="9">9月</option>
+				<option value="10">10月</option>
+				<option value="11">11月</option>
+				<option value="12">12月</option>
 			</select>
 		</div>
 		<div class="col-xs-3"  style="padding-left:0;">
-			<select class="form-control" id="sel2" style="padding-left:5px; padding-right:0;">
-			    <option>31日</option>
-			    <option>2日</option>
-			    <option>3日</option>
-			    <option>4日</option>
+			<select class="form-control" id="birthday-day" style="padding-left:5px; padding-right:0;">
+				<option value="1">1日</option>
+				<option value="2">2日</option>
+				<option value="3">3日</option>
+				<option value="4">4日</option>
+				<option value="5">5日</option>
+				<option value="6">6日</option>
+				<option value="7">7日</option>
+				<option value="8">8日</option>
+				<option value="9">9日</option>
+				<option value="10">10日</option>
+				<option value="11">11日</option>
+				<option value="12">12日</option>
+				<option value="13">13日</option>
+				<option value="14">14日</option>
+				<option value="15">15日</option>
+				<option value="16">16日</option>
+				<option value="17">17日</option>
+				<option value="18">18日</option>
+				<option value="19">19日</option>
+				<option value="20">20日</option>
+				<option value="21">21日</option>
+				<option value="22">22日</option>
+				<option value="23">23日</option>
+				<option value="24">24日</option>
+				<option value="25">25日</option>
+				<option value="26">26日</option>
+				<option value="27">27日</option>
+				<option value="28">28日</option>
+				<option value="29">29日</option>
+				<option value="30">30日</option>
+				<option value="31">31日</option>
 			</select>
 		</div>
 	</div>
@@ -104,10 +139,9 @@
 		</div>
 	</div>
 </div>
-	<script th:src="@{/js/lib/jquery-2.2.3.min.js}"
-		src="../../static/js/lib/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
-		src="../../static/js/lib/bootstrap-umi.min.js"></script>
-
+	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
+		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
+	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
+		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>
