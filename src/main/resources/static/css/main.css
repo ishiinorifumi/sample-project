@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+p.validation-error {
+	color:red;
+}
+
 div.error-message-area {
 	display: table-cell;    
     vertical-align: middle;

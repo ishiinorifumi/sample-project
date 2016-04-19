@@ -8,6 +8,11 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+# INTERNATIONALIZATION
+  messages:
+    basename: messages
+    cache-seconds: -1
+    encoding: UTF-8
 server:
    port: 8080
    context-path: /spplogin
