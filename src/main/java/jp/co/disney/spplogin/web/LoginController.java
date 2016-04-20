@@ -32,6 +32,21 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginController {
 	
 	private final static int SELECT_BARTHDAY_START_YEAR = 1901;
+	private final static String DEFAULT_BARTHDAY_YEAR = "1989";
+	private final static String DEFAULT_BARTHDAY_MONTH = "1";
+	private final static String DEFAULT_BARTHDAY_DAY = "1";
+	
+	/**
+	 * 誕生日の年ドロップダウンリストを生成する。
+	 * @return 年リスト
+	 */
+	@ModelAttribute(value="barthdayYears")
+	List<Integer> barthdayYears() {
+		final int currentYear = Year.now().getValue();
+		return IntStream.rangeClosed(SELECT_BARTHDAY_START_YEAR, currentYear)
+				.mapToObj(Integer::valueOf)
+				.collect(Collectors.toList());
+	}
 	
 	@ModelAttribute(value="loginForm") 
 	LoginForm setUpLoginForm() {
@@ -40,22 +55,24 @@ public class LoginController {
 	
 	@ModelAttribute(value="emptyMailForm") 
 	EmptyMailForm setUpEmptyMailForm() {
-		return new EmptyMailForm();
+		EmptyMailForm form = new EmptyMailForm();
+		form.setBirthdayYear(DEFAULT_BARTHDAY_YEAR);
+		form.setBirthdayMonth(DEFAULT_BARTHDAY_MONTH);
+		form.setBirthdayDay(DEFAULT_BARTHDAY_DAY);
+		return form;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String loginOrRegist(Model model) {
-		model.addAttribute("barthdayYears", barthdayYears());
 		return "login/login";
 	}
 	
-	@RequestMapping(params="login", method = RequestMethod.POST)
+	@RequestMapping(params = "login", method = RequestMethod.POST)
 	public String memberLogin(@ModelAttribute(value="loginForm") @Valid LoginForm form, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
             for(FieldError err: result.getFieldErrors()) {
                 log.debug("error code = [" + err.getCode() + "]");
             }
-            model.addAttribute("barthdayYears", barthdayYears());
             return "login/login";
             
         }
@@ -63,13 +80,12 @@ public class LoginController {
         return "redirect:/SPPLogin/emptymail";
 	}
 
-	@RequestMapping(params="firstTimeOfUse", method = RequestMethod.POST)
+	@RequestMapping(params = "firstTimeOfUse", method = RequestMethod.POST)
 	public String firstTimeOfUse(@ModelAttribute(value="emptyMailForm") @Valid EmptyMailForm form, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
             for(FieldError err: result.getFieldErrors()) {
                 log.debug("error code = [" + err.getCode() + "]");
             }
-            model.addAttribute("barthdayYears", barthdayYears());
             return "login/login";
             
         }
@@ -80,16 +96,5 @@ public class LoginController {
 	@RequestMapping(value="emptymail", method = RequestMethod.GET)
 	public String sendEmptMail() {
 		return "login/sendEmptyMail";
-	}
-	
-	/**
-	 * 誕生日の年ドロップダウンリストを生成する。
-	 * @return 年リスト
-	 */
-	private List<Integer> barthdayYears() {
-		final int currentYear = Year.now().getValue();
-		return IntStream.rangeClosed(SELECT_BARTHDAY_START_YEAR, currentYear)
-				.mapToObj(Integer::valueOf)
-				.collect(Collectors.toList());
 	}
 }

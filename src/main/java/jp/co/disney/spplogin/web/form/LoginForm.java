@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class LoginForm {
 	@NotBlank
-	@Size(max=3)
+	@Size(max=255)
 	private String memberNameOrEmailAddr;
 	
 	@NotBlank

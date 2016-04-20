@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<html lang="jp"
-	xmlns:th="http://www.thymeleaf.org"
+<html lang="jp" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <title>layout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
+<link rel="shortcut icon" th:href="@{/img/favicon.ico}" href="../../static/img/favicon.ico" />
 <link rel="stylesheet" type="text/css"
-	th:href="@{/css/bootstrap-umi.min.css}"
-	href="../static/css/bootstrap-umi.min.css" />
+	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
+	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"
+	href="../../static/css/main.css" />
 </head>
 <body>
-<div class="container">
-	<div class="row">
-		<!-- <div class="col-xs-10 col-xs-offset-1"> -->
-		<div class="col-xs-12">
-			<div layout:fragment="content">
-				<p>Default layout contents</p>
+	<div class="container">
+		<div class="row" style="margin-top: 10px;">
+			<div class="col-xs-12">
+				<div th:replace="fragment/header :: header"></div>
+			</div>
+		</div>
+		<div layout:fragment="content"></div>
+		<div class="row" style="margin-top: 10px;">
+			<div class="col-xs-12">
+				<div th:replace="fragment/footer :: footer"></div>
 			</div>
 		</div>
 	</div>
-</div>
-	<script th:src="@{/js/lib/jquery-2.2.3.min.js}"
-		src="../../static/js/lib/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/lib/bootstrap-umi.min.js}"
-		src="../static/js/lib/bootstrap-umi.min.js"></script>
+	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
+		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
+	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
+		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>

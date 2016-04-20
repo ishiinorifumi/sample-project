@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<html lang="jp" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <title>ログイン／新規登録</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,141 +9,186 @@
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
 	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/main.css}"
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"
 	href="../../static/css/main.css" />
 </head>
 <body>
-<div class="container">
-	<div class="row" style="margin-top:20px;">
-		<div class="col-xs-12">
-			<p>ディズニーハッピールームを利用するためには、メンバーログインが必要です。</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<ul th:Object="${loginForm}">
-			<li th:each="e : ${#fields.detailedErrors()}"  th:text="${e.message}" />
-    		</ul>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12 text-center">
-			<h4><strong>メンバーログイン</strong></h4>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<form th:action="@{/SPPLogin}"  th:Object="${loginForm}" method="post">
-				<div class="form-group">
-					<input type="text" class="form-control" name="memberNameOrEmailAddr" th:field="*{memberNameOrEmailAddr}"  placeholder="メールアドレスまたはメンバー名" />
-					<input type="password" class="form-control" name="password" th:field="*{password}" placeholder="パスワード" />
-				</div>
-				<div>・メールアドレス／メンバー名もしくはパスワードは、現在ご利用中のスマートフォンで登録されたメンバー登録情報を入力ください。</div>
-				<div>・メンバー名はご登録完了メールにも記載されています。</div>
-				<div class="center-block" style="width:200px; margin-top:10px; margin-bottom:10px;">
-					<div><a href="#"><span class="glyphicon glyphicon-question-sign"></span>パスワードを忘れた方</a></div>
-					<div><a href="#"><span class="glyphicon glyphicon-question-sign"></span>メンバー名を忘れた方</a></div>
-				</div>
-				<button type="submit" name="login" class="btn btn-lg btn-block btn-primary">ログイン</button>
-				<button type="button" class="btn btn-lg btn-block btn-info">設定はこちらから</button>
-			</form>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<hr/>
-			<p>メンバー登録がお済でない方は生年月日を入力して、「はじめて登録される方はこちら」をタップしてください。</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<strong>生年月日</strong>
-		</div>
-	</div>
-	<form th:action="@{/SPPLogin}" th:Object="${emptyMailForm}"  method="post">
-		<div class="row">
-			<div class="col-xs-6">
-				<select class="form-control" name="birthdayYear" th:field="*{birthdayYear}">
-				    <option th:each="year : ${barthdayYears}" th:text="${year}+'年'" th:value="${year}" th:selected="${year == 1989}">1989年</option>
-				</select>
-			</div>
-			<div class="col-xs-3" style="padding-left:0;">
-				<select class="form-control" name="birthdayMonth" th:field="*{birthdayMonth}" style="padding-left:5px; padding-right:0;">
-					<option value="1">1月</option>
-					<option value="2">2月</option>
-					<option value="3">3月</option>
-					<option value="4">4月</option>
-					<option value="5">5月</option>
-					<option value="6">6月</option>
-					<option value="7">7月</option>
-					<option value="8">8月</option>
-					<option value="9">9月</option>
-					<option value="10">10月</option>
-					<option value="11">11月</option>
-					<option value="12">12月</option>
-				</select>
-			</div>
-			<div class="col-xs-3"  style="padding-left:0;">
-				<select class="form-control" name="birthdayDay" th:field="*{birthdayDay}" style="padding-left:5px; padding-right:0;">
-					<option value="1">1日</option>
-					<option value="2">2日</option>
-					<option value="3">3日</option>
-					<option value="4">4日</option>
-					<option value="5">5日</option>
-					<option value="6">6日</option>
-					<option value="7">7日</option>
-					<option value="8">8日</option>
-					<option value="9">9日</option>
-					<option value="10">10日</option>
-					<option value="11">11日</option>
-					<option value="12">12日</option>
-					<option value="13">13日</option>
-					<option value="14">14日</option>
-					<option value="15">15日</option>
-					<option value="16">16日</option>
-					<option value="17">17日</option>
-					<option value="18">18日</option>
-					<option value="19">19日</option>
-					<option value="20">20日</option>
-					<option value="21">21日</option>
-					<option value="22">22日</option>
-					<option value="23">23日</option>
-					<option value="24">24日</option>
-					<option value="25">25日</option>
-					<option value="26">26日</option>
-					<option value="27">27日</option>
-					<option value="28">28日</option>
-					<option value="29">29日</option>
-					<option value="30">30日</option>
-					<option value="31">31日</option>
-				</select>
-			</div>
-		</div>
-		<div class="row" style="margin-top:20px;">
+	<div class="container" layout:fragment="content" th:remove="tag">
+		<div class="row" style="margin-top: 20px;">
 			<div class="col-xs-12">
-				<button type="submit" name="firstTimeOfUse" class="btn btn-block btn-info">はじめて登録される方はこちら</button>
+				<p>ディズニーハッピールームを利用するためには、メンバーログインが必要です。</p>
 			</div>
 		</div>
-	</form>
-	<div class="row">
-		<div class="col-xs-12 text-center">
+		<div class="row">
+			<div class="col-xs-12">
+				<ul th:Object="${loginForm}">
+					<li th:each="e : ${#fields.detailedErrors()}"
+						th:text="${e.message}" />
+				</ul>
+				<ul th:Object="${emptyMailForm}">
+					<li th:each="e : ${#fields.detailedErrors()}"
+						th:text="${e.message}" />
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h4>
+					<strong>メンバーログイン</strong>
+				</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form th:action="@{/SPPLogin}" th:Object="${loginForm}"
+					method="post">
+					<div class="form-group">
+						<input type="text" class="form-control"
+							name="memberNameOrEmailAddr" th:field="*{memberNameOrEmailAddr}"
+							placeholder="メールアドレスまたはメンバー名" /> <input type="password"
+							class="form-control" name="password" th:field="*{password}"
+							placeholder="パスワード" />
+					</div>
+					<ul>
+						<li><small>メールアドレス／メンバー名もしくはパスワードは、現在ご利用中のスマートフォンで登録されたメンバー登録情報を入力ください。</small></li>
+						<li><small>メンバー名はご登録完了メールにも記載されています。</small></li>
+					</ul>
+					<div class="center-block"
+						style="width: 200px; margin-top: 10px; margin-bottom: 10px;">
+						<div>
+							<a href="#"><span class="glyphicon glyphicon-question-sign"></span>パスワードを忘れた方</a>
+						</div>
+						<div>
+							<a href="#"><span class="glyphicon glyphicon-question-sign"></span>メンバー名を忘れた方</a>
+						</div>
+					</div>
+					<button type="submit" name="login"
+						class="btn btn-lg btn-block btn-info">ログイン</button>
+					<!--
+				<button type="button" class="btn btn-lg btn-block btn-info">設定はこちらから</button>
+				-->
+				</form>
+			</div>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h4>
+					<strong>新規メンバー登録</strong>
+				</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p>メンバー登録がお済でない方は生年月日を入力して、「はじめて登録される方はこちら」をタップしてください。</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<strong>生年月日</strong>
+			</div>
+		</div>
+		<form th:action="@{/SPPLogin}" th:Object="${emptyMailForm}"
+			method="post">
+			<div class="row">
+				<div class="col-xs-6">
+					<select class="form-control" name="birthdayYear">
+						<option th:each="year : ${barthdayYears}" th:text="${year}+'年'"
+							th:value="${year}" th:field="*{birthdayYear}"
+							th:selected="${year==1989}">1989年</option>
+					</select>
+				</div>
+				<div class="col-xs-3" style="padding-left: 0;">
+					<select class="form-control" name="birthdayMonth"
+						th:field="*{birthdayMonth}"
+						style="padding-left: 5px; padding-right: 0;">
+						<option value="1">1月</option>
+						<option value="2">2月</option>
+						<option value="3">3月</option>
+						<option value="4">4月</option>
+						<option value="5">5月</option>
+						<option value="6">6月</option>
+						<option value="7">7月</option>
+						<option value="8">8月</option>
+						<option value="9">9月</option>
+						<option value="10">10月</option>
+						<option value="11">11月</option>
+						<option value="12">12月</option>
+					</select>
+				</div>
+				<div class="col-xs-3" style="padding-left: 0;">
+					<select class="form-control" name="birthdayDay"
+						th:field="*{birthdayDay}"
+						style="padding-left: 5px; padding-right: 0;">
+						<option value="1">1日</option>
+						<option value="2">2日</option>
+						<option value="3">3日</option>
+						<option value="4">4日</option>
+						<option value="5">5日</option>
+						<option value="6">6日</option>
+						<option value="7">7日</option>
+						<option value="8">8日</option>
+						<option value="9">9日</option>
+						<option value="10">10日</option>
+						<option value="11">11日</option>
+						<option value="12">12日</option>
+						<option value="13">13日</option>
+						<option value="14">14日</option>
+						<option value="15">15日</option>
+						<option value="16">16日</option>
+						<option value="17">17日</option>
+						<option value="18">18日</option>
+						<option value="19">19日</option>
+						<option value="20">20日</option>
+						<option value="21">21日</option>
+						<option value="22">22日</option>
+						<option value="23">23日</option>
+						<option value="24">24日</option>
+						<option value="25">25日</option>
+						<option value="26">26日</option>
+						<option value="27">27日</option>
+						<option value="28">28日</option>
+						<option value="29">29日</option>
+						<option value="30">30日</option>
+						<option value="31">31日</option>
+					</select>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 20px;">
+				<div class="col-xs-12">
+					<button type="submit" name="firstTimeOfUse"
+						class="btn btn-block btn-info">はじめて登録される方はこちら</button>
+				</div>
+			</div>
+		</form>
+		<div class="row">
+			<div class="col-xs-12 text-center">
 				<a href="#"><span class="glyphicon glyphicon-question-sign"></span>ディズニー公式スマートフォンメンバーとは</a>
+			</div>
+		</div>
+		<div class="row">
+			<hr />
+			<div class="col-xs-12">
+				<p>以下のサービスを利用している方は、下記から利用してください。</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="text-center">
+					<img th:src="@{/img/logo_disneymarket.png}"
+						src="../../static/img/logo_disneymarket.png" height="40" />
+				</div>
+				<button type="button" class="btn btn-block btn-info">
+					ディスニーマーケット<br />・オン・ソフトバンク
+				</button>
+				<div class="text-center" style="margin-top: 10px;">
+					<img th:src="@{/img/logo_disneypass.png}"
+						src="../../static/img/logo_disneypass.png" height="40" />
+				</div>
+				<button type="button" class="btn btn-block btn-info">ディズニーパス</button>
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		<hr/>
-		<div class="col-xs-12">
-			<p>以下のサービスを利用している方は、下記から利用してください。 </p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<button type="button" class="btn btn-block btn-info">ディスニーマーケットを利用する</button>
-			<button type="button" class="btn btn-block btn-info">ディズニーパスを利用する</button>
-		</div>
-	</div>
-</div>
 	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
 		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
 	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
