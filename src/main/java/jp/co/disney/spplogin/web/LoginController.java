@@ -50,7 +50,7 @@ public class LoginController {
 	
 	@ModelAttribute(value="loginForm") 
 	LoginForm setUpLoginForm() {
-		return  new LoginForm();
+		return new LoginForm();
 	}
 	
 	@ModelAttribute(value="emptyMailForm") 
@@ -63,33 +63,26 @@ public class LoginController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String loginOrRegist(Model model) {
+	public String dispLoginOrRegistForm(Model model) {
+		//throw new RuntimeException();
 		return "login/login";
 	}
 	
 	@RequestMapping(params = "login", method = RequestMethod.POST)
 	public String memberLogin(@ModelAttribute(value="loginForm") @Valid LoginForm form, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
-            for(FieldError err: result.getFieldErrors()) {
-                log.debug("error code = [" + err.getCode() + "]");
-            }
+        	model.addAttribute("hasError", true);
             return "login/login";
-            
         }
-
         return "redirect:/SPPLogin/emptymail";
 	}
 
 	@RequestMapping(params = "firstTimeOfUse", method = RequestMethod.POST)
 	public String firstTimeOfUse(@ModelAttribute(value="emptyMailForm") @Valid EmptyMailForm form, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
-            for(FieldError err: result.getFieldErrors()) {
-                log.debug("error code = [" + err.getCode() + "]");
-            }
+        	model.addAttribute("hasError", true);
             return "login/login";
-            
         }
-
         return "redirect:/SPPLogin/emptymail";
 	}
 	

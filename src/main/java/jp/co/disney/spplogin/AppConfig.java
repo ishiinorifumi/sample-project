@@ -4,11 +4,13 @@ import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 import jp.co.disney.spplogin.interceptor.MaintenanceInterceptor;
 import jp.co.disney.spplogin.interceptor.UserAgentInterceptor;
 
 @Configuration
+//@EnableRedisHttpSession
 public class AppConfig {
 	
     @Bean

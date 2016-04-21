@@ -2,3 +2,7 @@
 spring:
   thymeleaf:
     cache: false
+tomcat:
+  ajp:
+    enabled: true
+    port: 8009

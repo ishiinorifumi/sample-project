@@ -1,5 +1,5 @@
 spring:
-  profiles.active: local
+  profiles.active: dev
 # Thymeleaf
   thymeleaf:
     enabled: true
@@ -16,4 +16,3 @@ spring:
 server:
    port: 8080
    context-path: /spplogin
-   

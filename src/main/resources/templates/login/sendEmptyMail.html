@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<html lang="jp" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <title>空メール送信確認</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
-	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/main.css}"
-	href="../../static/css/main.css" />
 </head>
 <body>
-	<div class="container">
+	<div class="container" layout:fragment="content" th:remove="tag">
 		<div class="row" style="margin-top: 20px;">
 			<div class="col-xs-12">
 				<p>
@@ -22,7 +18,7 @@
 		</div>
 		<div class="row" style="margin-top:10px;">
 			<div class="col-xs-12">
-				<button type="button" class="btn btn-lg btn-block btn-info">空メール送信</button>
+				<button type="button" class="btn btn-lg btn-cyan600_rsd btn-block">空メール送信</button>
 			</div>
 		</div>
 		<hr/>
@@ -48,9 +44,5 @@
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
-		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
-		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>

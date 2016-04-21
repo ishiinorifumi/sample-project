@@ -6,11 +6,6 @@
 <title>ログイン／新規登録</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
-	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"
-	href="../../static/css/main.css" />
 </head>
 <body>
 	<div class="container" layout:fragment="content" th:remove="tag">
@@ -21,14 +16,16 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<ul th:Object="${loginForm}">
-					<li th:each="e : ${#fields.detailedErrors()}"
-						th:text="${e.message}" />
-				</ul>
-				<ul th:Object="${emptyMailForm}">
-					<li th:each="e : ${#fields.detailedErrors()}"
-						th:text="${e.message}" />
-				</ul>
+				<div th:if="${hasError}" class="error-message-area">
+					<ul th:Object="${loginForm}">
+						<li th:each="e : ${#fields.detailedErrors()}"
+							th:text="${e.message}" />
+					</ul>
+					<ul th:Object="${emptyMailForm}">
+						<li th:each="e : ${#fields.detailedErrors()}"
+							th:text="${e.message}" />
+					</ul>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -63,7 +60,7 @@
 						</div>
 					</div>
 					<button type="submit" name="login"
-						class="btn btn-lg btn-block btn-info">ログイン</button>
+						class="btn btn-lg btn-indigo600_rsd btn-block">ログイン</button>
 					<!--
 				<button type="button" class="btn btn-lg btn-block btn-info">設定はこちらから</button>
 				-->
@@ -89,7 +86,7 @@
 			</div>
 		</div>
 		<form th:action="@{/SPPLogin}" th:Object="${emptyMailForm}"
-			method="post">
+			method="POST">
 			<div class="row">
 				<div class="col-xs-6">
 					<select class="form-control" name="birthdayYear">
@@ -157,11 +154,11 @@
 			<div class="row" style="margin-top: 20px;">
 				<div class="col-xs-12">
 					<button type="submit" name="firstTimeOfUse"
-						class="btn btn-block btn-info">はじめて登録される方はこちら</button>
+						class="btn btn-cyan600_rsd btn-block">はじめて登録される方はこちら</button>
 				</div>
 			</div>
 		</form>
-		<div class="row">
+		<div class="row" style="margin-top:10px;">
 			<div class="col-xs-12 text-center">
 				<a href="#"><span class="glyphicon glyphicon-question-sign"></span>ディズニー公式スマートフォンメンバーとは</a>
 			</div>
@@ -178,20 +175,16 @@
 					<img th:src="@{/img/logo_disneymarket.png}"
 						src="../../static/img/logo_disneymarket.png" height="40" />
 				</div>
-				<button type="button" class="btn btn-block btn-info">
+				<button type="button" class="btn btn-cyan600_rsd btn-block">
 					ディスニーマーケット<br />・オン・ソフトバンク
 				</button>
 				<div class="text-center" style="margin-top: 10px;">
 					<img th:src="@{/img/logo_disneypass.png}"
 						src="../../static/img/logo_disneypass.png" height="40" />
 				</div>
-				<button type="button" class="btn btn-block btn-info">ディズニーパス</button>
+				<button type="button" class="btn btn-cyan600_rsd btn-block">ディズニーパス</button>
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
-		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
-		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>

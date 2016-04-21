@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<html lang="jp" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <title>メンバー登録情報入力</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
-	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/main.css}"
-	href="../../static/css/main.css" />
 </head>
 <body>
-	<div class="container">
+	<div class="container" layout:fragment="content" th:remove="tag">
 		<div class="row" style="margin-top: 20px;">
 			<div class="col-xs-12">
 				<p>ディズニーハッピールームを利用するためにはメンバー登録が必要です。</p>
@@ -23,6 +19,16 @@
 				<h4>
 					<strong>メンバー登録情報入力</strong>
 				</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div th:if="${hasError}" class="error-message-area">
+					<ul th:Object="${memberEntryForm}">
+						<li th:each="e : ${#fields.detailedErrors()}"
+							th:text="${e.message}" />
+					</ul>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -41,33 +47,33 @@
 						<span class="text-info"><strong>生年月日</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong>1991/12/26</strong></span>
+						<span><strong th:text="${birthDay}">1901/1/1</strong></span>
 					</div>
 					<div class="text-center" style="margin-top:15px;">
 						<span class="text-info"><strong>メールアドレス</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong>test123@abc.xx.jp</strong></span>
+						<span><strong th:text="${mailAddress}">abc@abc.xx.jp</strong></span>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row" style="margin-top:20px;">
 			<div class="col-xs-12">
-				<form>
+				<form th:action="@{/SPPEntry}" th:Object="${memberEntryForm}" method="POST">
 					<div class="form-group">
 						<label for="password">パスワード<br/><small>ご希望のパスワードを入力してください。</small></label>
-						<input type="password" class="form-control" id="password" placeholder="半角英数字（6～25文字）" />
+						<input type="password" class="form-control" name="password" placeholder="半角英数字（6～25文字）" th:field="*{password}" />
 					</div>
 					<div class="form-group">
 						<label for="password-confirm">パスワード（確認）</label>
-						<input type="password" class="form-control" id="password-confirm" placeholder="半角英数字（6～25文字）" />
+						<input type="password" class="form-control" name="confirmPassword" placeholder="半角英数字（6～25文字）" th:field="*{confirmPassword}" />
 					</div>
 					<div class="form-group">
-						<input type="radio" name="gender" id="gender1" value="1" checked="true"/><label for="gender1" style="margin-left:5px;">女性</label>
-						<input type="radio" name="gender" id="gender2" value="2" style="margin-left:50px;"/><label for="gender2" style="margin-left:5px;">男性</label>
+						<input type="radio" id="female" name="gender" value="F" th:field="*{gender}" checked="true" /><label for="female" style="margin-left:5px;">女性</label>
+						<input type="radio" id="male" name="gender" value="M" th:field="*{gender}" style="margin-left:50px;"/><label for="male" style="margin-left:5px;">男性</label>
 					</div>
-					<button type="submit" class="btn btn-lg btn-block btn-info">確認</button>
+					<button type="submit" class="btn btn-lg btn-cyan600_rsd btn-block">確認</button>
 				</form>
 			</div>
 		</div>

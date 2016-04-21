@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="jp" xmlns:th="http://www.thymeleaf.org">
+<html lang="jp" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <title>メンバー登録完了</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
-	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/main.css}"
-	href="../../static/css/main.css" />
 </head>
 <body>
-	<div class="container">
+	<div class="container" layout:fragment="content" th:remove="tag">
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<h4>
@@ -59,7 +55,7 @@
 		</div>
 		<div class="row" style="margin-top:10px;">
 			<div class="col-xs-12">
-				<button type="button" class="btn btn-block btn-info">ディズニーハッピールームをたのしむ</button>
+				<button type="button" class="btn btn-cyan600_rsd btn-block">ディズニーハッピールームをたのしむ</button>
 			</div>
 		</div>
 		<hr />
@@ -71,7 +67,7 @@
 				<p>
 				ディズニーアカウントのニュースメール設定は、ディズニーアカウント登録情報変更からお手続きしてください。
 				</p>
-				<button type="button" class="btn btn-block btn-info">ディズニーアカウントへ</button>
+				<button type="button" class="btn btn-cyan600_rsd btn-block">ディズニーアカウントへ</button>
 			</div>
 		</div>
 		<hr />
@@ -80,13 +76,9 @@
 				<p>
 				ディズニーファンのためのメンバーズサイトでディズニー最新情報をいち早くチェックしよう！
 				</p>
-				<button type="button" class="btn btn-block btn-info">My Disneyへ</button>
+				<button type="button" class="btn btn-cyan600_rsd btn-block">My Disneyへ</button>
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
-		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
-		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>
