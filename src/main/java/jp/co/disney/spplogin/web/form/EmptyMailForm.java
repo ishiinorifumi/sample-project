@@ -38,4 +38,8 @@ public class EmptyMailForm {
 
 		return true;
 	}
+	
+	public String birthday(String delimiter) {
+		return String.join(delimiter, new String[]{birthdayYear, birthdayMonth, birthdayDay});
+	}
 }

@@ -1,5 +1,9 @@
+# 稼働環境の指定はサーバ環境変数(SPRING_PROFILES_ACTIVE)で設定する。
+#spring:
+#  profiles:
+#    active: local
+
 spring:
-  profiles.active: dev
 # Thymeleaf
   thymeleaf:
     enabled: true
@@ -16,3 +20,4 @@ spring:
 server:
    port: 8080
    context-path: /spplogin
+   

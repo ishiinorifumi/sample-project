@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.disney.spplogin.web.form.MemberEntryForm;
@@ -36,14 +37,14 @@ public class MemberRegistController {
 	}
 	
 	@RequestMapping(value = "", params = "form", method = RequestMethod.GET)
-	public String entryForm(Model model) {
+	public String entryForm(@RequestParam(required = true) String form, Model model) {
 		// TODO formパラメータに設定されたRedisキーからセッションを復元し、メールアドレス、誕生日を取得する。
 		model.addAttribute("mailAddress", "test123@gmail.com");
 		model.addAttribute("birthDay", "1991/12/26");
 		return "memberregist/entry";
 	}
 	
-	@RequestMapping("")
+	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String entry(@ModelAttribute("memberEntryForm") @Valid MemberEntryForm form, BindingResult result, RedirectAttributes attributes, Model model) {
 		if(result.hasErrors()){
 			model.addAttribute("hasError", true);

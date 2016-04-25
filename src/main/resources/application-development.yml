@@ -1,17 +1,11 @@
-# Thymeleaf
 spring:
-  thymeleaf:
-    cache: false
-# Redis
   redis:
-    host: 127.0.0.1
+    host: dccore-dev-dbcc.c88wn7.0001.apne1.cache.amazonaws.com
     port: 6379
-# Tomcat AJP Connection
 tomcat:
   ajp:
     enabled: true
     port: 8009
-# 空メール関連
 emptymail:
    domain: disney.jp
    account:

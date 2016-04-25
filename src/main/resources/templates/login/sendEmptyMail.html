@@ -18,7 +18,7 @@
 		</div>
 		<div class="row" style="margin-top:10px;">
 			<div class="col-xs-12">
-				<button type="button" class="btn btn-lg btn-cyan600_rsd btn-block">空メール送信</button>
+				<button type="button" id="sendEmptyMail" class="btn btn-lg btn-cyan600_rsd btn-block">空メール送信</button>
 			</div>
 		</div>
 		<hr/>
@@ -39,10 +39,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 text-center" style="border:1px solid #D3D3D3; border-radius:10px; ">
-				<p style="height:50px; line-height:50px;">disney.jp</p>
+			<div class="col-xs-12 text-center">
+				<div  style="border:1px solid #D3D3D3; border-radius:10px;" >
+					<p style="height:50px; line-height:55px;"><strong>disney.jp</strong></p>
+				</div>
 			</div>
 		</div>
 	</div>
+
+	<script  layout:fragment="script" th:src="@{/js/emptymail.js}"
+		src="../../static/js/emptymail.js"></script>
 </body>
 </html>

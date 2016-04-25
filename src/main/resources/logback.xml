@@ -35,9 +35,9 @@
 		</encoder>
 	</appender>
 	
-	<if condition='isDefined("spring.profiles.active")'>
+	<if condition='isDefined("SPRING_PROFILES_ACTIVE")'>
 		<then>
-			<include resource="logback-${spring.profiles.active}.xml" />
+			<include resource="logback-${SPRING_PROFILES_ACTIVE}.xml" />
 		</then>
 		<else>
 			<include resource="logback-local.xml" />
