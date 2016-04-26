@@ -6,6 +6,7 @@
 <title>空メール送信確認</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
+<link th:href="@{/lightbox/css/lightbox.min.css}" rel="stylesheet" />
 </head>
 <body>
 	<div class="container" layout:fragment="content" th:remove="tag">
@@ -47,7 +48,9 @@
 		</div>
 	</div>
 
-	<script  layout:fragment="script" th:src="@{/js/emptymail.js}"
-		src="../../static/js/emptymail.js"></script>
+	<div  layout:fragment="script"  th:remove="tag">
+		<script th:src="@{/js/emptymail.js}" src="../../static/js/emptymail.js"></script>
+		<script th:src="@{/lightbox/js/lightbox.min.js}" src="../../static/lightbox/js/lightbox.min.js"></script>
+	</div>
 </body>
 </html>

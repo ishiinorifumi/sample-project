@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,7 @@ public class LoginController {
 	private final static String DEFAULT_BARTHDAY_YEAR = "1989";
 	private final static String DEFAULT_BARTHDAY_MONTH = "1";
 	private final static String DEFAULT_BARTHDAY_DAY = "1";
+
 	
 	@Value("${emptymail.domain}")
 	private String emptyMailDomain;
@@ -54,6 +56,10 @@ public class LoginController {
 	
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	private StringRedisTemplate redisTemplate;
+	
 	
 	/**
 	 * 誕生日の年ドロップダウンリストを生成する。
@@ -128,12 +134,25 @@ public class LoginController {
 	 * 空メール送信先アドレスを返す<br/>
 	 * これだけRestController
 	 */
-	@RequestMapping(value="sendEmptMail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="emptyMailAddress", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> sendEmptMail() {
+		
+		final String key;
+		if(session.getAttribute("spplogin.emptyMailKey") == null) {
+			key = SecureRandomUtil.genToken();
+			session.setAttribute("spplogin.emptyMailKey", key);
+		} else {
+			key = (String) session.getAttribute("spplogin.emptyMailKey");
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("birthday", session.getAttribute("birthday"));
+		map.put("mailaddress", "test-abc@aa.bb.cc");
+		redisTemplate.opsForHash().putAll(key, map);
+		
 		Map<String, String> json = new HashMap<>();
-		String key = SecureRandomUtil.genToken();
-		json.put("to-address", accountPrefix + key + "@" + emptyMailDomain);
+		json.put("to_address", accountPrefix + key + "@" + emptyMailDomain);
 		return new ResponseEntity<Map<String, String>>(json, HttpStatus.OK);
 	}
 	
