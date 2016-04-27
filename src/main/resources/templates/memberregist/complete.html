@@ -33,13 +33,13 @@
 						<span class="text-info"><strong>ご登録メールアドレス</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong>test123@abc.xx.jp</strong></span>
+						<span><strong th:text="${member.getMailAddress()}">test123@abc.xx.jp</strong></span>
 					</div>
 					<div class="text-center" style="margin-top:15px;">
 						<span class="text-info"><strong>発行されたメンバー名</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong>_dsalq4ad1</strong></span>
+						<span><strong th:text="${member.getMemberName()}">_dsalq4ad1</strong></span>
 					</div>
 				</div>
 			</div>

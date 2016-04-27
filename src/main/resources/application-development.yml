@@ -9,4 +9,4 @@ tomcat:
 emptymail:
    domain: disney.jp
    account:
-      prefix: SPPLOGIN_
+      prefix: SPPLOGIN+

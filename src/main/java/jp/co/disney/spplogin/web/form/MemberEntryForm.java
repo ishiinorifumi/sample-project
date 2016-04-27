@@ -17,7 +17,6 @@ import lombok.Data;
 public class MemberEntryForm {
 	/** メールアドレス */
 	@NotBlank
-	@Email
 	private String mailAddress;
 	
 	/** 誕生日 */
@@ -26,7 +25,7 @@ public class MemberEntryForm {
 	
 	/** パスワード */
 	@Size(min = 6, max = 25)
-	@Pattern(regexp = "[0-9A-B]*", message="パスワードは半角英数字を入力してください。")
+	@Pattern(regexp = "[0-9A-Za-z]*", message="パスワードは半角英数字を入力してください。")
 	private String password;
 	
 	/** 確認用パスワード */

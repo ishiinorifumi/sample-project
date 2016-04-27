@@ -47,13 +47,13 @@
 						<span class="text-info"><strong>生年月日</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong th:text="${birthDay}">1901/1/1</strong></span>
+						<span><strong th:text="${guest.getBirthDay()}">1901/1/1</strong></span>
 					</div>
 					<div class="text-center" style="margin-top:15px;">
 						<span class="text-info"><strong>メールアドレス</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong th:text="${mailAddress}">abc@abc.xx.jp</strong></span>
+						<span><strong th:text="${guest.getMailAddress()}">abc@abc.xx.jp</strong></span>
 					</div>
 				</div>
 			</div>

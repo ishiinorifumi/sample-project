@@ -6,7 +6,8 @@
 <title>空メール送信確認</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
-<link th:href="@{/lightbox/css/lightbox.min.css}" rel="stylesheet" />
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" />
+
 </head>
 <body>
 	<div class="container" layout:fragment="content" th:remove="tag">
@@ -46,11 +47,22 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- 空メール処理実装後に要削除 ここから-->  
+		<div id="empty-mail-dialog" title="空メール送信仮実装">
+			<p>払い出した宛先アドレス：</p>
+			<span id="to-address"></span>
+			<hr/>
+			<p>レスポンスメール記載の<br/>メンバー登録アクセスURL：</p>
+			登録を完了するため下記URLにアクセスしてください。<br/>
+			<span id="response-url"></span>
+		</div>
+		<!-- 空メール処理実装後に要削除 ここまで -->  
 	</div>
-
+ 
 	<div  layout:fragment="script"  th:remove="tag">
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 		<script th:src="@{/js/emptymail.js}" src="../../static/js/emptymail.js"></script>
-		<script th:src="@{/lightbox/js/lightbox.min.js}" src="../../static/lightbox/js/lightbox.min.js"></script>
 	</div>
 </body>
 </html>

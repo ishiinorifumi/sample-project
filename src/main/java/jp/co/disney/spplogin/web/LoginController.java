@@ -1,7 +1,6 @@
 package jp.co.disney.spplogin.web;
 
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +11,15 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jp.co.disney.spplogin.util.SecureRandomUtil;
 import jp.co.disney.spplogin.web.form.EmptyMailForm;
 import jp.co.disney.spplogin.web.form.LoginForm;
+import jp.co.disney.spplogin.web.model.Guest;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -48,17 +47,23 @@ public class LoginController {
 	private final static String DEFAULT_BARTHDAY_DAY = "1";
 
 	
-	@Value("${emptymail.domain}")
+	@Value("${spplogin.emptymail.domain}")
 	private String emptyMailDomain;
 	
-	@Value("${emptymail.account.prefix}")
+	@Value("${spplogin.emptymail.account-prefix}")
 	private String accountPrefix;
+	
+	@Value("${spplogin.emptymail.session-coop-key}")
+	private String sessionCoopKey;
 	
 	@Autowired
 	private HttpSession session;
 	
 	@Autowired
-	private StringRedisTemplate redisTemplate;
+	private Guest guest;
+	
+    @Autowired
+    private RedisTemplate<String, Guest> redisTemplate;
 	
 	
 	/**
@@ -117,7 +122,9 @@ public class LoginController {
         	model.addAttribute("hasError", true);
             return "login/login";
         }
-        session.setAttribute("birthday", form.birthday("/"));
+        
+        guest.setBirthDay(form.birthday("/"));
+        
         return "redirect:/SPPLogin/emptymail";
 	}
 	
@@ -138,22 +145,19 @@ public class LoginController {
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> sendEmptMail() {
 		
-		final String key;
-		if(session.getAttribute("spplogin.emptyMailKey") == null) {
-			key = SecureRandomUtil.genToken();
-			session.setAttribute("spplogin.emptyMailKey", key);
+		final String coopKey;
+		if(session.getAttribute(sessionCoopKey) == null) {
+			coopKey = SecureRandomUtil.genToken();
+			session.setAttribute(sessionCoopKey, coopKey);
 		} else {
-			key = (String) session.getAttribute("spplogin.emptyMailKey");
+			coopKey = (String) session.getAttribute(sessionCoopKey);
 		}
+	
+		redisTemplate.opsForValue().set(coopKey, guest.copy());
 		
-		Map<String, Object> map = new HashMap<>();
-		map.put("birthday", session.getAttribute("birthday"));
-		map.put("mailaddress", "test-abc@aa.bb.cc");
-		redisTemplate.opsForHash().putAll(key, map);
-		
-		Map<String, String> json = new HashMap<>();
-		json.put("to_address", accountPrefix + key + "@" + emptyMailDomain);
-		return new ResponseEntity<Map<String, String>>(json, HttpStatus.OK);
+		Map<String, String> res = new HashMap<>();
+		res.put("to_address", accountPrefix + coopKey + "@" + emptyMailDomain);
+		return new ResponseEntity<Map<String, String>>(res, HttpStatus.OK);
 	}
 	
 }

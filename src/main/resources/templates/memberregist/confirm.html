@@ -31,30 +31,32 @@
 						<span class="text-info"><strong>生年月日</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong>1991/12/26</strong></span>
+						<span><strong th:text="${guest.getBirthDay()}">1991/12/26</strong></span>
 					</div>
 					<div class="text-center" style="margin-top:15px;">
 						<span class="text-info"><strong>メールアドレス</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong>test123@abc.xx.jp</strong></span>
+						<span><strong th:text="${guest.getMailAddress()}">test123@abc.xx.jp</strong></span>
 					</div>
 					<div class="text-center" style="margin-top:15px;">
 						<span class="text-info"><strong>性別</strong></span>
 					</div>
 					<div class="text-center">
-						<span><strong>女性</strong></span>
+						<span><strong th:text="${guest.getGender().getDecode()}">女性</strong></span>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row" style="margin-top:20px;">
-			<div class="col-xs-6">
-				<button type="button" class="btn btn-lg btn-cyan600_rsd btn-block">登録</button>
-			</div>
-			<div class="col-xs-6">
-				<button type="button" class="btn btn-lg btn-grey600_rsd btn-block">修正</button>
-			</div>
+			<form th:action="@{/SPPEntry/register}" method="POST">
+				<div class="col-xs-6">
+					<button type="submit" name="register" class="btn btn-lg btn-cyan600_rsd btn-block">登録</button>
+				</div>
+				<div class="col-xs-6">
+					<button type="submit" name="modify" class="btn btn-lg btn-grey600_rsd btn-block">修正</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </body>

@@ -11,8 +11,3 @@ tomcat:
   ajp:
     enabled: true
     port: 8009
-# 空メール関連
-emptymail:
-   domain: disney.jp
-   account:
-      prefix: SPPLOGIN_

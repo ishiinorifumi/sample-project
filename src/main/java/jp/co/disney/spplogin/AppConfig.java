@@ -3,12 +3,16 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.session.data.redis.config.ConfigureRedisAction;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.HandlerInterceptor;
+
 import jp.co.disney.spplogin.interceptor.MaintenanceInterceptor;
 import jp.co.disney.spplogin.interceptor.UserAgentInterceptor;
+import jp.co.disney.spplogin.web.model.Guest;
 
 @Configuration
 public class AppConfig {
@@ -32,4 +36,11 @@ public class AppConfig {
     		container.addErrorPages(error400Page, error404Page, error500Page);
        });
     }
+    
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    Guest gust() {
+        return new Guest();
+    }
+    
 }
