@@ -26,6 +26,11 @@ public class RedisConfig {
         return ConfigureRedisAction.NO_OP;
     }
     
+    /**
+     * GuestクラスインスタンスをRedisにJson形式でシリアライズ／デシリアライズするための設定
+     * @param connectionFactory
+     * @return
+     */
     @Bean
     public RedisTemplate<String, Guest> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Guest> redisTemplate = new RedisTemplate<>();

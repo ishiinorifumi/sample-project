@@ -25,7 +25,9 @@ server:
 spplogin:
   # 空メール関連
   emptymail:
-    session-coop-key: spplogin.session-coop-key
+    session-coop-key:
+      expire: 24
+      expire-timeunit: HOURS
     domain: disney.jp
     account-prefix: SPPLOGIN+
 

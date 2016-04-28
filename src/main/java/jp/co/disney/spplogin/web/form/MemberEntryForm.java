@@ -49,4 +49,5 @@ public class MemberEntryForm {
 		
 		return password.equals(confirmPassword);
 	}
+	
 }

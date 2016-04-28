@@ -21,8 +21,15 @@ public class ErrorController {
 		return "common/404";
 	}
 	
+	@RequestMapping(value="/405", method=RequestMethod.GET)
+	public String methodNotAllowed() {
+		return "common/405";
+	}
+	
 	@RequestMapping(value="/500", method=RequestMethod.GET)
 	public String internalServerError() {
 		return "common/500";
 	}
+	
+	
 }

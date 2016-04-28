@@ -11,3 +11,10 @@ tomcat:
   ajp:
     enabled: true
     port: 8009
+
+spplogin:
+  # 空メール関連
+  emptymail:
+    session-coop-key:
+      expire: 10
+      expire-timeunit: MINUTES

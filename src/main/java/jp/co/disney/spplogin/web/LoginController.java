@@ -4,6 +4,7 @@ import java.time.Year;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -45,7 +46,7 @@ public class LoginController {
 	private final static String DEFAULT_BARTHDAY_YEAR = "1989";
 	private final static String DEFAULT_BARTHDAY_MONTH = "1";
 	private final static String DEFAULT_BARTHDAY_DAY = "1";
-
+	private final String SESSION_COOP_KEY = "spplogin.session-coop-key";
 	
 	@Value("${spplogin.emptymail.domain}")
 	private String emptyMailDomain;
@@ -53,8 +54,11 @@ public class LoginController {
 	@Value("${spplogin.emptymail.account-prefix}")
 	private String accountPrefix;
 	
-	@Value("${spplogin.emptymail.session-coop-key}")
-	private String sessionCoopKey;
+	@Value("${spplogin.emptymail.session-coop-key.expire}")
+	private int coopKeyExpire;
+	
+	@Value("${spplogin.emptymail.session-coop-key.expire-timeunit}")
+	private String coopKeyExpireTimeUnit;
 	
 	@Autowired
 	private HttpSession session;
@@ -146,14 +150,15 @@ public class LoginController {
 	public ResponseEntity<Map<String, String>> sendEmptMail() {
 		
 		final String coopKey;
-		if(session.getAttribute(sessionCoopKey) == null) {
+		if(session.getAttribute(SESSION_COOP_KEY) == null) {
 			coopKey = SecureRandomUtil.genToken();
-			session.setAttribute(sessionCoopKey, coopKey);
+			session.setAttribute(SESSION_COOP_KEY, coopKey);
 		} else {
-			coopKey = (String) session.getAttribute(sessionCoopKey);
+			coopKey = (String) session.getAttribute(SESSION_COOP_KEY);
 		}
 	
 		redisTemplate.opsForValue().set(coopKey, guest.copy());
+		redisTemplate.expire(coopKey, coopKeyExpire, TimeUnit.valueOf(coopKeyExpireTimeUnit));
 		
 		Map<String, String> res = new HashMap<>();
 		res.put("to_address", accountPrefix + coopKey + "@" + emptyMailDomain);

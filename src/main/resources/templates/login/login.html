@@ -40,7 +40,7 @@
 				<form th:action="@{/SPPLogin}" th:Object="${loginForm}"
 					method="post">
 					<div class="form-group">
-						<input type="text" class="form-control"
+						<input type="email" class="form-control"
 							name="memberNameOrEmailAddr" th:field="*{memberNameOrEmailAddr}"
 							placeholder="メールアドレスまたはメンバー名" /> <input type="password"
 							class="form-control" name="password" th:field="*{password}"

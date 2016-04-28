@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="jp" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
 <head>
 <meta charset="utf-8" />
 <title>エラー</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/vendor/bootstrap/css/bootstrap-umi.min.css}"
-	href="../../static/css/vendor/bootstrap/css/bootstrap-umi.min.css" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/main.css}"
-	href="../../static/css/main.css" />
 </head>
 <body>
-	<div class="container">
+	<div class="container" layout:fragment="content" th:remove="tag">
 		<div class="row" style="margin-top:20px;">
 			<div class="col-xs-12">
 					<div class="error-message-area">
@@ -34,9 +30,5 @@
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/js/vendor/jquery-2.2.3.min.js}"
-		src="../../static/js/vendor/jquery-2.2.3.min.js"></script>
-	<script th:src="@{/js/vendor/bootstrap-umi.min.js}"
-		src="../../static/js/vendor/bootstrap-umi.min.js"></script>
 </body>
 </html>
