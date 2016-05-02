@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 public class LoginForm {
 	@NotBlank
-	@Size(max=255)
-	private String memberNameOrEmailAddr;
+	private String password;
 	
 	@NotBlank
-	private String password;
+	@Size(max=255)
+	private String memberNameOrEmailAddr;
 }

@@ -9,6 +9,9 @@
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/vendor/cb-materialbtn/css/color/cb-materialbtn-grey.css}"
 	href="../../static/css/vendor/cb-materialbtn/css/color/cb-materialbtn-grey.css" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/flipswitch.css}"
+	href="../../static/css/flipswitch.css" />
 </head>
 <body>
 	<div class="container" layout:fragment="content" th:remove="tag">
@@ -24,6 +27,7 @@
 				<p>以下の内容でディズニー公式スマートフォンメンバーに登録します。<br/>内容をご確認のうえ、[登録]ボタンをタップしてください。</p>
 			</div>
 		</div>
+		<form th:action="@{/SPPEntry/register}" method="POST">
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="info-area">
@@ -39,9 +43,37 @@
 					<div class="text-center">
 						<span><strong th:text="${guest.getMailAddress()}">test123@abc.xx.jp</strong></span>
 					</div>
+					<div style="margin-top:15px;">
+						<p class="text-center"><a href="http://www.disney.co.jp/home.html" target="_blank"><ins><strong>利用規約</strong></ins></a>に同意（必須）</p>
+						<p class="text-center"><a href="http://www.disney.co.jp/home.html" target="_blank"><ins><strong>個人情報について</strong></ins></a>に同意（必須）</p>
+					</div>
+					<div>
+						<div class="row">
+							<div class="col-xs-9">
+								<span class="text-justify">
+									<strong>ウォルト・ディズニー・グループからの最新情報やキャンペーン等のお知らせを希望する。</strong>
+								</span>
+							</div>
+							<div  class="col-xs-3" style="margin:0; padding:0;">
+								<div>
+									<div class="onoffswitch">
+									    <input type="checkbox" name="mailMagazineFg" class="onoffswitch-checkbox" id="myonoffswitch" value="true" checked="true" />
+									    <label class="onoffswitch-label" for="myonoffswitch" ></label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div>
+							<ul>
+								<li><small>お知らせが不要な場合はOFFにしてください。</small></li>
+								<li><small>ディズニーパスメールマガジンやディズニーアカウント「ニュースメール購読」ページで別途購読を選択されるお知らせとは異なります。</small></li>
+							</ul>
+						</div>
+					</div>
 					<div class="text-center" style="margin-top:15px;">
 						<span class="text-info"><strong>性別</strong></span>
 					</div>
+					
 					<div class="text-center">
 						<span><strong th:text="${guest.getGender().getDecode()}">女性</strong></span>
 					</div>
@@ -49,15 +81,19 @@
 			</div>
 		</div>
 		<div class="row" style="margin-top:20px;">
-			<form th:action="@{/SPPEntry/register}" method="POST">
+			
 				<div class="col-xs-6">
 					<button type="submit" name="register" class="btn btn-lg btn-cyan600_rsd btn-block">登録</button>
 				</div>
 				<div class="col-xs-6">
 					<button type="submit" name="modify" class="btn btn-lg btn-grey600_rsd btn-block">修正</button>
 				</div>
-			</form>
 		</div>
+		</form>
+	</div>
+	
+	<div  layout:fragment="script"  th:remove="tag">
+		
 	</div>
 </body>
 </html>

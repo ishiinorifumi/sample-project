@@ -111,7 +111,7 @@ public class LoginController {
 	@RequestMapping(params = "login", method = RequestMethod.POST)
 	public String memberLogin(@ModelAttribute(value="loginForm") @Valid LoginForm form, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
-        	model.addAttribute("hasError", true);
+        	model.addAttribute("hasErrorForLogin", true);
             return "login/login";
         }
         return "redirect:/SPPLogin/emptymail";
@@ -123,7 +123,7 @@ public class LoginController {
 	@RequestMapping(params = "firstTimeOfUse", method = RequestMethod.POST)
 	public String firstTimeOfUse(@ModelAttribute(value="emptyMailForm") @Valid EmptyMailForm form, BindingResult result, RedirectAttributes attributes, Model model) {
         if (result.hasErrors()) {
-        	model.addAttribute("hasError", true);
+        	model.addAttribute("hasErrorForRegister", true);
             return "login/login";
         }
         

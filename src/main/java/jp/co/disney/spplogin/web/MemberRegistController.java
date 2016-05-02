@@ -76,12 +76,14 @@ public class MemberRegistController {
 			
 			// セッション復元済みフラグをたてる
 			guest.setSessionRestored(true);
+			
 		}
+		
 		return "memberregist/entry";
 	}
 	
 	/**
-	 * 登録
+	 * 登録内容チェック
 	 * @param form
 	 * @param result
 	 * @param attributes
@@ -90,6 +92,9 @@ public class MemberRegistController {
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String entry(@ModelAttribute("memberEntryForm") @Valid MemberEntryForm form, BindingResult result, RedirectAttributes attributes, Model model) {
+		
+		checkInvalidOperation();
+		
 		if(result.hasErrors()){
 			model.addAttribute("hasError", true);
 			return "memberregist/entry";
@@ -106,9 +111,8 @@ public class MemberRegistController {
 	 * @return
 	 */
 	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
-	public String confirm() {
-		final String tranToken = SecureRandomUtil.genToken();
-		session.setAttribute(tranTokenSessionKey, tranToken);
+	public String confirm(Model model) {
+		checkInvalidOperation();
 		return "memberregist/confirm";
 	}
 	
@@ -118,6 +122,7 @@ public class MemberRegistController {
 	 */
 	@RequestMapping(value = "/register", params="modify", method = RequestMethod.POST)
 	public String modify() {
+		checkInvalidOperation();
 		return "redirect:/SPPEntry?form";
 	}
 
@@ -128,12 +133,17 @@ public class MemberRegistController {
 	 * @return
 	 */
 	@RequestMapping(value = "/register", params="register", method = RequestMethod.POST)
-	public String register(RedirectAttributes attributes, SessionStatus sessionStatus) {
+	public String register(@RequestParam(required = false) boolean mailMagazineFg, RedirectAttributes attributes) {
+		checkInvalidOperation();
+		
+		guest.setMailMagazineFg(mailMagazineFg);
+		
 		//TODO Core APIによる会員登録処理
 		
 		final Guest member = guest.copy();
+		
+		// TODO APIで登録されたメンバー名
 		member.setMemberName("_apldk18d");
-		sessionStatus.setComplete();
 		attributes.addFlashAttribute("member", member);
 		return "redirect:/SPPEntry/complete";
 	}
@@ -143,7 +153,19 @@ public class MemberRegistController {
 	 * @return
 	 */
 	@RequestMapping(value="/complete", method = RequestMethod.GET)
-	public String complete() {
+	public String complete(SessionStatus sessionStatus) {
+		checkInvalidOperation();
+		// セッションを破棄
+		sessionStatus.setComplete();
 		return "memberregist/complete";
+	}
+	
+	/**
+	 * メンバー登録完了後に各種メンバー登録ページにアクセスされた場合のチェック
+	 */
+	private void checkInvalidOperation() {
+		if(!guest.isSessionRestored()){
+			throw new ApplicationException(ApplicationErrors.INVALID_OPERATION);
+		}
 	}
 }

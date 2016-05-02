@@ -11,63 +11,9 @@
 	<div class="container" layout:fragment="content" th:remove="tag">
 		<div class="row" style="margin-top: 20px;">
 			<div class="col-xs-12">
-				<p>ディズニーハッピールームを利用するためには、メンバーログインが必要です。</p>
+				<p>ディズニーシェアを利用するためには、ディズニーアカウント登録（無料）が必要です。</p>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<div th:if="${hasError}" class="error-message-area">
-					<ul th:Object="${loginForm}">
-						<li th:each="e : ${#fields.detailedErrors()}"
-							th:text="${e.message}" />
-					</ul>
-					<ul th:Object="${emptyMailForm}">
-						<li th:each="e : ${#fields.detailedErrors()}"
-							th:text="${e.message}" />
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 text-center">
-				<h4>
-					<strong>メンバーログイン</strong>
-				</h4>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<form th:action="@{/SPPLogin}" th:Object="${loginForm}"
-					method="post">
-					<div class="form-group">
-						<input type="email" class="form-control"
-							name="memberNameOrEmailAddr" th:field="*{memberNameOrEmailAddr}"
-							placeholder="メールアドレスまたはメンバー名" /> <input type="password"
-							class="form-control" name="password" th:field="*{password}"
-							placeholder="パスワード" />
-					</div>
-					<ul>
-						<li><small>メールアドレス／メンバー名もしくはパスワードは、現在ご利用中のスマートフォンで登録されたメンバー登録情報を入力ください。</small></li>
-						<li><small>メンバー名はご登録完了メールにも記載されています。</small></li>
-					</ul>
-					<div class="center-block"
-						style="width: 200px; margin-top: 10px; margin-bottom: 10px;">
-						<div>
-							<a href="#"><span class="glyphicon glyphicon-question-sign"></span>パスワードを忘れた方</a>
-						</div>
-						<div>
-							<a href="#"><span class="glyphicon glyphicon-question-sign"></span>メンバー名を忘れた方</a>
-						</div>
-					</div>
-					<button type="submit" name="login"
-						class="btn btn-lg btn-indigo600_rsd btn-block">ログイン</button>
-					<!--
-				<button type="button" class="btn btn-lg btn-block btn-info">設定はこちらから</button>
-				-->
-				</form>
-			</div>
-		</div>
-		<hr />
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<h4>
@@ -77,7 +23,18 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<p>メンバー登録がお済でない方は生年月日を入力して、「はじめて登録される方はこちら」をタップしてください。</p>
+				<div th:if="${hasErrorForRegister}" class="error-message-area">
+					<ul th:Object="${emptyMailForm}">
+						<li th:each="e : ${#fields.detailedErrors()}"
+							th:text="${e.message}" />
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div th:if="${hasErrorForRegister}" class="row" style="padding-bottom:20px;"></div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p>メンバー登録がお済でない方は生年月日を選択して、「はじめて登録される方はこちら」をタップしてください。</p>
 			</div>
 		</div>
 		<div class="row">
@@ -164,8 +121,68 @@
 			</div>
 		</div>
 		<div class="row">
-			<hr />
 			<div class="col-xs-12">
+				<hr />
+				<p>すでにご登録済みの方は、以下からメンバーログインを行ってください。</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<div>
+					<img th:src="@{/img/logo_disneyaccount.png}"
+						src="../../static/img/logo_disneyaccount.png" height="40" />
+				</div>
+				<h4>
+					<strong>メンバーログイン</strong>
+				</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div th:if="${hasErrorForLogin}" class="error-message-area">
+					<ul th:Object="${loginForm}">
+						<li th:each="e : ${#fields.detailedErrors()}"
+							th:text="${e.message}" />
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div th:if="${hasErrorForLogin}" class="row" style="padding-bottom:20px;"></div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form th:action="@{/SPPLogin}" th:Object="${loginForm}"
+					method="post">
+					<div class="form-group">
+						<input type="email" class="form-control"
+							name="memberNameOrEmailAddr" th:field="*{memberNameOrEmailAddr}"
+							placeholder="メールアドレスまたはメンバー名" /> <input type="password"
+							class="form-control" name="password" th:field="*{password}"
+							placeholder="パスワード" />
+					</div>
+					<ul>
+						<li><small>メールアドレス／メンバー名もしくはパスワードは、現在ご利用中のスマートフォンで登録されたメンバー登録情報を入力ください。</small></li>
+						<li><small>メンバー名はご登録完了メールにも記載されています。</small></li>
+					</ul>
+					<div class="center-block"
+						style="width: 200px; margin-top: 10px; margin-bottom: 10px;">
+						<div>
+							<a href="#"><span class="glyphicon glyphicon-question-sign"></span>パスワードを忘れた方</a>
+						</div>
+						<div>
+							<a href="#"><span class="glyphicon glyphicon-question-sign"></span>メンバー名を忘れた方</a>
+						</div>
+					</div>
+					<button type="submit" name="login"
+						class="btn btn-lg btn-indigo600_rsd btn-block">ログイン</button>
+					<!--
+				<button type="button" class="btn btn-lg btn-block btn-info">設定はこちらから</button>
+				-->
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<hr />
 				<p>以下のサービスを利用している方は、下記から利用してください。</p>
 			</div>
 		</div>

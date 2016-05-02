@@ -19,10 +19,11 @@ public class Guest implements Serializable {
 	private Gender gender;
 	private String password;
 	private String memberName;
+	private boolean mailMagazineFg;
 	private boolean sessionRestored = false;
 	
 	public Guest copy() {
-		return new Guest(this.birthDay, this.mailAddress, this.gender, this.password, this.memberName, this.sessionRestored);
+		return new Guest(this.birthDay, this.mailAddress, this.gender, this.password, this.memberName, this.mailMagazineFg, this.sessionRestored);
 	}
 }
 
