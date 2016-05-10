@@ -18,3 +18,6 @@ spplogin:
     session-coop-key:
       expire: 10
       expire-timeunit: MINUTES
+  core-webapi:
+    proxy:
+      enable: true

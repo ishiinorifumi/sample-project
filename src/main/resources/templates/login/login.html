@@ -145,9 +145,17 @@
 							th:text="${e.message}" />
 					</ul>
 				</div>
+				<div th:if="${apiLoginFailed}" class="error-message-area">
+					<ul>
+						<li>
+						メールアドレスまたはメンバー名もしくはパスワードが正しくありません。
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		<div th:if="${hasErrorForLogin}" class="row" style="padding-bottom:20px;"></div>
+		<div th:if="${hasErrorForLogin}" class="row" style="padding-bottom:15px;"></div>
+		<div th:if="${apiLoginFailed}" class="row" style="padding-bottom:15px;"></div>
 		<div class="row">
 			<div class="col-xs-12">
 				<form th:action="@{/Login}" th:Object="${loginForm}"

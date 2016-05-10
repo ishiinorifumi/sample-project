@@ -24,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import jp.co.disney.spplogin.exception.ApplicationErrors;
+import jp.co.disney.spplogin.exception.ApplicationException;
 import jp.co.disney.spplogin.interceptor.MaintenanceInterceptor;
 import jp.co.disney.spplogin.interceptor.UserAgentInterceptor;
 import jp.co.disney.spplogin.web.model.Guest;
@@ -74,14 +76,17 @@ public class AppConfig {
     
     @Bean
     public RestTemplate restTemplate() {
-
-	    CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		credsProvider.setCredentials(new AuthScope(proxyHost, proxyPort), new UsernamePasswordCredentials(proxyUser, proxyPass));
 		
 		HttpClientBuilder clientBuilder = HttpClientBuilder.create();
-		clientBuilder.setProxy(new HttpHost(proxyHost, proxyPort, proxySchema));
-		clientBuilder.setDefaultCredentialsProvider(credsProvider);
-		clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+		
+		if(proxyEnable) {
+			CredentialsProvider credsProvider = new BasicCredentialsProvider();
+			credsProvider.setCredentials(new AuthScope(proxyHost, proxyPort), new UsernamePasswordCredentials(proxyUser, proxyPass));
+			clientBuilder.setProxy(new HttpHost(proxyHost, proxyPort, proxySchema));
+			clientBuilder.setDefaultCredentialsProvider(credsProvider);
+			clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+		}
+		
 		clientBuilder.disableCookieManagement();
 		clientBuilder.disableRedirectHandling();
 		
@@ -95,7 +100,11 @@ public class AppConfig {
 
 			@Override
 			public void handleError(ClientHttpResponse response) throws IOException {
-				log.error("Response error: {} {}", response.getStatusCode(), response.getStatusText());
+				if(HttpStatus.Series.SERVER_ERROR.equals(response.getStatusCode().series())) {
+					log.error("Core WebAPI呼び出し時に予期せぬエラーが発生しました。");
+					log.error("Response error: {} {}", response.getStatusCode(), response.getStatusText());
+					throw new ApplicationException(ApplicationErrors.UNEXPECTED, "CoreAPIエラー");
+				}
 			}
 
 			@Override
