@@ -24,7 +24,7 @@ import jp.co.disney.spplogin.web.form.MemberEntryForm;
 import jp.co.disney.spplogin.web.model.Guest;
 
 @Controller
-@RequestMapping("SPPEntry")
+@RequestMapping("Regist")
 @SessionAttributes("scopedTarget.guest")
 public class MemberRegistController {
 
@@ -103,7 +103,7 @@ public class MemberRegistController {
 		guest.setGender(Gender.valueOf(form.getGender()));
 		guest.setPassword(form.getPassword());
 		
-		return "redirect:/SPPEntry/confirm";
+		return "redirect:/Regist/confirm";
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public class MemberRegistController {
 	@RequestMapping(value = "/register", params="modify", method = RequestMethod.POST)
 	public String modify() {
 		checkInvalidOperation();
-		return "redirect:/SPPEntry?form";
+		return "redirect:/Regist?form";
 	}
 
 	/**
@@ -145,19 +145,19 @@ public class MemberRegistController {
 		// TODO APIで登録されたメンバー名
 		member.setMemberName("_apldk18d");
 		attributes.addFlashAttribute("member", member);
-		return "redirect:/SPPEntry/complete";
+		return "redirect:/Regist/finish";
 	}
 	
 	/**
 	 * 登録完了画面
 	 * @return
 	 */
-	@RequestMapping(value="/complete", method = RequestMethod.GET)
-	public String complete(SessionStatus sessionStatus) {
+	@RequestMapping(value="/finish", method = RequestMethod.GET)
+	public String finish(SessionStatus sessionStatus) {
 		checkInvalidOperation();
 		// セッションを破棄
 		sessionStatus.setComplete();
-		return "memberregist/complete";
+		return "memberregist/finish";
 	}
 	
 	/**

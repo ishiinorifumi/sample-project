@@ -32,6 +32,14 @@ spplogin:
     account-prefix: SPPLOGIN+
   # CORE WebAPI関連
   core-webapi:
+    base-url: http://dev2.ssopen.disney.co.jp/connect/
+    # COR-901 認証認可要求
+    cor-901:
+      path: authorize
+      client-id: dshar_aL7foR2yEn
+      nonce: n-0S6_WzA2Mj
+      response-type: "token id_token"
+      scope: openid
     proxy:
       enable: false
       schema: http
@@ -39,12 +47,4 @@ spplogin:
       port: 8080
       user: z2h7273
       password: unSrf93!
-    base-url: http://dev2.ssopen.disney.co.jp/connect/
-    # COR-901 認証認可要求
-    cor-901:
-      path: authorize/
-      client-id: dshar_aL7foR2yEn
-      nonce: n-0S6_WzA2Mj
-      response-type: "code id_token"
-      scope: openid
     

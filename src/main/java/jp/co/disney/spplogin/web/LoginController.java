@@ -22,11 +22,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jp.co.disney.spplogin.service.CoreWebApiService;
 import jp.co.disney.spplogin.util.SecureRandomUtil;
 import jp.co.disney.spplogin.web.form.EmptyMailForm;
 import jp.co.disney.spplogin.web.form.LoginForm;
@@ -39,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-@RequestMapping("/SPPLogin")
+@RequestMapping("/Login")
 public class LoginController {
 	
 	private final static int SELECT_BARTHDAY_START_YEAR = 1901;
@@ -68,6 +70,9 @@ public class LoginController {
 	
     @Autowired
     private RedisTemplate<String, Guest> redisTemplate;
+    
+    @Autowired
+    private CoreWebApiService coreWebApiService;
 	
 	
 	/**
@@ -109,12 +114,12 @@ public class LoginController {
 	 * ログインボタン押下時
 	 */
 	@RequestMapping(params = "login", method = RequestMethod.POST)
-	public String memberLogin(@ModelAttribute(value="loginForm") @Valid LoginForm form, BindingResult result, RedirectAttributes attributes, Model model) {
+	public String memberLogin(@ModelAttribute(value="loginForm") @Valid LoginForm form, BindingResult result, RedirectAttributes attributes, Model model, @RequestHeader("User-Agent") String userAgent) {
         if (result.hasErrors()) {
         	model.addAttribute("hasErrorForLogin", true);
             return "login/login";
         }
-        return "redirect:/SPPLogin/emptymail";
+        return "redirect:/Login/emptymail";
 	}
 
 	/**
@@ -129,7 +134,7 @@ public class LoginController {
         
         guest.setBirthDay(form.birthday("/"));
         
-        return "redirect:/SPPLogin/emptymail";
+        return "redirect:/Login/emptymail";
 	}
 	
 	/**

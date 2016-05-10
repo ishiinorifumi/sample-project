@@ -42,7 +42,7 @@
 				<strong>生年月日</strong>
 			</div>
 		</div>
-		<form th:action="@{/SPPLogin}" th:Object="${emptyMailForm}"
+		<form th:action="@{/Login}" th:Object="${emptyMailForm}"
 			method="POST">
 			<div class="row">
 				<div class="col-xs-6">
@@ -150,7 +150,7 @@
 		<div th:if="${hasErrorForLogin}" class="row" style="padding-bottom:20px;"></div>
 		<div class="row">
 			<div class="col-xs-12">
-				<form th:action="@{/SPPLogin}" th:Object="${loginForm}"
+				<form th:action="@{/Login}" th:Object="${loginForm}"
 					method="post">
 					<div class="form-group">
 						<input type="email" class="form-control"

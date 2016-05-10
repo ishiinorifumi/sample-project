@@ -60,7 +60,7 @@
 		</div>
 		<div class="row" style="margin-top:20px;">
 			<div class="col-xs-12">
-				<form th:action="@{/SPPEntry}" th:Object="${memberEntryForm}" method="POST">
+				<form th:action="@{/Regist}" th:Object="${memberEntryForm}" method="POST">
 					<div class="form-group">
 						<label for="password">パスワード<br/><small>ご希望のパスワードを入力してください。</small></label>
 						<input type="password" class="form-control" name="password" placeholder="半角英数字（6～25文字）" th:field="*{password}" />
