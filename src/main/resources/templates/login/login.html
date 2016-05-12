@@ -110,10 +110,11 @@
 			</div>
 			<div class="row" style="margin-top: 20px;">
 				<div class="col-xs-12">
-					<button type="submit" name="firstTimeOfUse"
+					<button type="submit" name="register"
 						class="btn btn-cyan600_rsd btn-block">はじめて登録される方はこちら</button>
 				</div>
 			</div>
+			<input type="hidden" name="register" />
 		</form>
 		<div class="row" style="margin-top:10px;">
 			<div class="col-xs-12 text-center">
@@ -181,7 +182,8 @@
 						</div>
 					</div>
 					<button type="submit" name="login"
-						class="btn btn-lg btn-indigo600_rsd btn-block">ログイン</button>
+						class="btn btn-lg btn-indigo600_rsd btn-block" onclick="SppCommon.submitInProgress(this);">ログイン</button>
+					<input type="hidden" name="login" />
 					<!--
 				<button type="button" class="btn btn-lg btn-block btn-info">設定はこちらから</button>
 				-->

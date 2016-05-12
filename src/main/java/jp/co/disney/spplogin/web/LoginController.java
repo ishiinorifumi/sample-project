@@ -12,8 +12,6 @@ import java.util.stream.IntStream;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,9 +28,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jp.co.disney.spplogin.enums.CoreApiErrors;
 import jp.co.disney.spplogin.exception.ApplicationErrors;
 import jp.co.disney.spplogin.exception.ApplicationException;
+import jp.co.disney.spplogin.helper.URLDecodeHelper;
 import jp.co.disney.spplogin.service.CoreWebApiService;
 import jp.co.disney.spplogin.util.SecureRandomUtil;
 import jp.co.disney.spplogin.web.form.EmptyMailForm;
@@ -128,41 +130,70 @@ public class LoginController {
 		final ResponseEntity<String> response = coreWebApiService.authorize(form.getMemberNameOrEmailAddr(),
 				form.getPassword(), userAgent);
 		
+		final URI redirectURL =  response.getHeaders().getLocation();
+		
 		if(response.getStatusCode().series().equals(HttpStatus.Series.CLIENT_ERROR)) {
-			 final String apiErrorCode = parseQueryString(response.getHeaders().getLocation(), "error_description");
-			 if(apiErrorCode == null) {
-				 log.error("認証認可API呼び出しエラー時のエラーコードが未設定です。 Location : {}", response.getHeaders().getLocation().toString());
-				 throw new ApplicationException(ApplicationErrors.UNEXPECTED, "ログインエラー判定不能");
-			 }
+			
+			String apiErrorCode = null;
+			
+			if(redirectURL != null) {
+				apiErrorCode = new URLDecodeHelper(redirectURL).getQueryValue("error_description");
+			}
+			
+			if(redirectURL == null || apiErrorCode == null) {
+				log.error("認証認可API呼び出しエラー時のエラーコードが未設定です。 Location : {}", redirectURL);
+				throw new ApplicationException(ApplicationErrors.UNEXPECTED, "認証APIエラーコード未設定");
+			}
 			 
-			 if(apiErrorCode.equals(CoreApiErrors.FAILED_OR_INVALID.getCode())
+			if(apiErrorCode.equals(CoreApiErrors.FAILED_OR_INVALID.getCode())
 					 || apiErrorCode.equals(CoreApiErrors.UNAUTHORIZED.getCode())) {
 				 // ログイン失敗。メンバー名またはパスワード不正
-				 model.addAttribute("apiLoginFailed", true);
-				 return "login/login";
-			 } else {
-				 //　アカウント状態不正
-				 return "redirect:/OneidStatus";
-			 }
+				model.addAttribute("apiLoginFailed", true);
+				return "login/login";
+			} else {
+				//　アカウント状態不正
+				return "redirect:/OneidStatus";
+			}
+		}
+		
+		final URLDecodeHelper urlDecodeHelper = new URLDecodeHelper(redirectURL);
+		
+		try {
+			// DIDアカウント判定のためログイン詳細情報を取得
+			final String loginDescription = urlDecodeHelper.getQueryValueWithUrlDecode("description");
+			log.debug("Login Description : {}", loginDescription);
+			final Map<String, String> loginDescMap = new ObjectMapper().readValue(loginDescription, new TypeReference<Map<String, String>>(){});
+			final String loginType = loginDescMap.get("login");
+			log.debug("Login Type : {}", loginType);
+			
+			if(loginType == null) {
+				throw new RuntimeException("ログインタイプが未設定のためDIDアカウント判定ができません。");
+			}
+			
+			if(loginType == "did") {
+				return sppRegisterAndLoginForDid(urlDecodeHelper.getQueryValue("didToken"));
+			}
+		} catch (Exception e) {
+			log.error("DIDアカウント判定処理時に予期せぬエラーが発生しました。", e);
+			throw new ApplicationException(ApplicationErrors.UNEXPECTED, e, "DIDアカウント判定エラー");
 		}
 		
 		return response;
 	}
 
-	private String parseQueryString(URI url, String queryKey) {
-		String val = null;
-		for(NameValuePair p : URLEncodedUtils.parse(url, "UTF-8")){
-			if(p.getName().equals(queryKey)) {
-				return p.getValue();
-			}
-		}
-		return val;
+	/**
+	 * DID会員の場合、SPP会員登録後SPPログインを行う。
+	 * @param didToken　DIDトークン
+	 * @return ログイン結果レスポンス
+	 */
+	private ResponseEntity<String> sppRegisterAndLoginForDid(String didToken) {
+		return  null;
 	}
 	
 	/**
 	 * はじめて利用される方はこちらボタン押下時
 	 */
-	@RequestMapping(params = "firstTimeOfUse", method = RequestMethod.POST)
+	@RequestMapping(params = "register", method = RequestMethod.POST)
 	public String firstTimeOfUse(@ModelAttribute(value = "emptyMailForm") @Valid EmptyMailForm form,
 			BindingResult result, Model model) {
 		if (result.hasErrors()) {

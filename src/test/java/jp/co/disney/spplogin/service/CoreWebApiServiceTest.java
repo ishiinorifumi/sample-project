@@ -1,5 +1,6 @@
 package jp.co.disney.spplogin.service;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class CoreWebApiServiceTest {
 	@Autowired
 	private CoreWebApiService coreWebApiService;
 	
+	@Ignore("ローカルでの確認用")
 	@Test
 	public void testAuthoreize() throws Exception {
 		String android = "Mozilla/5.0 (Linux; U; Android 2.2.1; en-us; Nexus One Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";

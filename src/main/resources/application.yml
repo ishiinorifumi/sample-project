@@ -39,12 +39,16 @@ spplogin:
       port: 8080
       user: z2h7273
       password: unSrf93!
-    base-url: http://dev2.ssopen.disney.co.jp/connect/
+    base-url: http://dev2.ssopen.disney.co.jp
     # COR-901 認証認可要求
     cor-901:
-      path: authorize/
+      path: /connect/authorize
       client-id: dshar_aL7foR2yEn
       nonce: n-0S6_WzA2Mj
       response-type: "code id_token"
       scope: openid
+    # COR-112 DID会員情報照会
+    cor-901:
+      path: /webapi/v1/did/DIDInformation
+
     
