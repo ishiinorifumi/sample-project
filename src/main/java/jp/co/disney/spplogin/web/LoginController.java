@@ -37,6 +37,7 @@ import jp.co.disney.spplogin.exception.ApplicationException;
 import jp.co.disney.spplogin.helper.URLDecodeHelper;
 import jp.co.disney.spplogin.service.CoreWebApiService;
 import jp.co.disney.spplogin.util.SecureRandomUtil;
+import jp.co.disney.spplogin.vo.DidMemberDetails;
 import jp.co.disney.spplogin.web.form.EmptyMailForm;
 import jp.co.disney.spplogin.web.form.LoginForm;
 import jp.co.disney.spplogin.web.model.Guest;
@@ -126,6 +127,7 @@ public class LoginController {
 			return "login/login";
 		}
 
+		log.info("SPPログイン処理を開始します。");
 		// 認証認可APIコール
 		final ResponseEntity<String> response = coreWebApiService.authorize(form.getMemberNameOrEmailAddr(),
 				form.getPassword(), userAgent);
@@ -151,6 +153,7 @@ public class LoginController {
 				model.addAttribute("apiLoginFailed", true);
 				return "login/login";
 			} else {
+				log.info("アカウント状態不正 : HTTPステータス={} APIラーコード={}", response.getStatusCode(), apiErrorCode);
 				//　アカウント状態不正
 				return "redirect:/OneidStatus";
 			}
@@ -158,27 +161,29 @@ public class LoginController {
 		
 		final URLDecodeHelper urlDecodeHelper = new URLDecodeHelper(redirectURL);
 		
+		String loginType;
+		
 		try {
 			// DIDアカウント判定のためログイン詳細情報を取得
 			final String loginDescription = urlDecodeHelper.getQueryValueWithUrlDecode("description");
 			log.debug("Login Description : {}", loginDescription);
 			final Map<String, String> loginDescMap = new ObjectMapper().readValue(loginDescription, new TypeReference<Map<String, String>>(){});
-			final String loginType = loginDescMap.get("login");
+			loginType = loginDescMap.get("login");
 			log.debug("Login Type : {}", loginType);
 			
-			if(loginType == null) {
-				throw new RuntimeException("ログインタイプが未設定のためDIDアカウント判定ができません。");
-			}
-			
-			if(loginType == "did") {
-				return sppRegisterAndLoginForDid(urlDecodeHelper.getQueryValue("didToken"));
-			}
 		} catch (Exception e) {
-			log.error("DIDアカウント判定処理時に予期せぬエラーが発生しました。", e);
+			log.error("DIDアカウント判定処理時に予期せぬエラーが発生しました。");
 			throw new ApplicationException(ApplicationErrors.UNEXPECTED, e, "DIDアカウント判定エラー");
 		}
 		
-		return response;
+		if(loginType.equals("did")) {
+			log.info("DIDログインに成功しました。");
+			log.info("DID会員のSPP会員新規登録を開始します。");
+			return sppRegisterAndLoginForDid(urlDecodeHelper.getQueryValue("did_token"), form.getMemberNameOrEmailAddr(), form.getPassword(), userAgent);
+		} else {
+			log.info("SPPログインに成功しました。");	
+			return response;			
+		}
 	}
 
 	/**
@@ -186,8 +191,10 @@ public class LoginController {
 	 * @param didToken　DIDトークン
 	 * @return ログイン結果レスポンス
 	 */
-	private ResponseEntity<String> sppRegisterAndLoginForDid(String didToken) {
-		return  null;
+	private ResponseEntity<String> sppRegisterAndLoginForDid(String didToken, String memberName, String password, String userAgent) {
+		final DidMemberDetails didMemberDetails = coreWebApiService.getDidInformation(didToken);
+		coreWebApiService.registerSppMember(didMemberDetails.convertToSppMemberDetails(), false, false, didToken);
+		return coreWebApiService.authorize(memberName, password, userAgent);
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 # Thymeleaf
 spring:
+  profiles:
+    active: unit
   thymeleaf:
     cache: false
 # Redis
@@ -21,5 +23,3 @@ spplogin:
   core-webapi:
     proxy:
       enable: false
-    base-url: http://localhost
-    port: 8989

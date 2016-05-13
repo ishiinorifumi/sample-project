@@ -1,9 +1,6 @@
-# 稼働環境の指定はサーバ環境変数(SPRING_PROFILES_ACTIVE)で設定する。
-#spring:
-#  profiles:
-#    active: local
-
 spring:
+  profiles:
+    active: unit
 # Thymeleaf
   thymeleaf:
     enabled: true
@@ -32,14 +29,6 @@ spplogin:
     account-prefix: SPPLOGIN+
   # CORE WebAPI関連
   core-webapi:
-    base-url: http://dev2.ssopen.disney.co.jp/connect/
-    # COR-901 認証認可要求
-    cor-901:
-      path: authorize
-      client-id: dshar_aL7foR2yEn
-      nonce: n-0S6_WzA2Mj
-      response-type: "token id_token"
-      scope: openid
     proxy:
       enable: false
       schema: http
@@ -47,4 +36,21 @@ spplogin:
       port: 8080
       user: z2h7273
       password: unSrf93!
+    #base-url: http://dev.ssopen.disney.co.jp
+    base-url: http://localhost
+    port: 8989
+    # COR-901 認証認可要求
+    cor-901:
+      path: /connect/authorize
+      client-id: dshar_aL7foR2yEn
+      nonce: n-0S6_WzA2Mj
+      response-type: "code id_token"
+      scope: openid
+    # COR-112 DID会員情報照会
+    cor-112:
+      path: /webapi/v1/did/DIDInformation/me
+    # COR-001 SPP会員新規登録
+    cor-001:
+      path: /webapi/v1/SPPMembership
+
     
