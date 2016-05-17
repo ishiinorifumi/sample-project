@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,13 +33,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class CoreWebApiService {
 
-	private static final String REDIRECT_URI = "http://dev.ssopen.disney.co.jp/auidauth/SessionKeyInfoUpd/";
-
 	@Value("${spplogin.core-webapi.base-url}")
 	private String baseUrl;
 
 	@Value("${spplogin.core-webapi.port}")
 	private String port;
+	
+	@Value("${spplogin.core-webapi.cor-901.redirect-url}")
+	private String redirectUrl;
 	
 	@Value("${spplogin.core-webapi.cor-901.path}")
 	private String cor901path;
@@ -75,7 +75,7 @@ public class CoreWebApiService {
 	 * @param password　パスワード
 	 * @param userAgent　ユーザエージェント
 	 */
-	public ResponseEntity<String> authorize(String memberNameOrEmailAddr, String password, String userAgent) {
+	public ResponseEntity<String> authorize(String memberNameOrEmailAddr, String password, String userAgent, String dspp) {
 
 		final Map<String, String> openidRequest = new HashMap<>();
 		openidRequest.put("member_name", memberNameOrEmailAddr);
@@ -104,9 +104,9 @@ public class CoreWebApiService {
 				.port(port)
 				.queryParam("response_type", responseType)
 				.queryParam("client_id", clientId)
-				.queryParam("redirect_uri", REDIRECT_URI)
+				.queryParam("redirect_uri", redirectUrl)
 				.queryParam("scope", scope)
-				.queryParam("state", "m3eK3TpVRrFhKgx92Kn9TlEgdpU6uHA2LdCUbU/tMLA=")
+				.queryParam("state", dspp)
 				.queryParam("nonce", nonce)
 				.queryParam("request", jwtRequest)
 				.build()
@@ -150,10 +150,10 @@ public class CoreWebApiService {
 		try {
 			final ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
 			
-			log.debug("Response Status : {}", response.getStatusCode());
+			log.debug("Response Status : {} {}", response.getStatusCode(), response.getStatusCode().getReasonPhrase());
 			log.debug("Response Body : {}", response.getBody());
 			
-			if(response.getStatusCode().series().equals(HttpStatus.Series.CLIENT_ERROR)) {
+			if(response.getStatusCode().is4xxClientError()) {
 				log.error("DID会員情報照会(COR-112)呼び出し時にエラーが発生しました。 : {}", response.getBody());
 				throw new RuntimeException("DID会員情報照会(COR-112)呼び出し時にエラーが発生しました。");
 			}
@@ -221,10 +221,10 @@ public class CoreWebApiService {
 		final HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
 		final ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 		
-		log.debug("Response status : {}", response.getStatusCode());
+		log.debug("Response status : {} {}", response.getStatusCode(), response.getStatusCode().getReasonPhrase());
 		log.debug("Response Body : {}", response.getBody());
 		
-		if(response.getStatusCode().series().equals(HttpStatus.Series.CLIENT_ERROR)){
+		if(response.getStatusCode().is4xxClientError()){
 			log.error("SPP会員新規登録(COR-001)呼び出し時にエラーが発生しました。 : {}", response.getBody());
 			throw new RuntimeException("SPP会員新規登録(COR-001)呼び出し時にエラーが発生しました。");
 		}

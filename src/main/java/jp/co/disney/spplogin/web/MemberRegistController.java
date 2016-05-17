@@ -19,7 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jp.co.disney.spplogin.enums.Gender;
 import jp.co.disney.spplogin.exception.ApplicationErrors;
 import jp.co.disney.spplogin.exception.ApplicationException;
-import jp.co.disney.spplogin.util.SecureRandomUtil;
+import jp.co.disney.spplogin.service.CoreWebApiService;
+import jp.co.disney.spplogin.vo.SppMemberDetails;
 import jp.co.disney.spplogin.web.form.MemberEntryForm;
 import jp.co.disney.spplogin.web.model.Guest;
 
@@ -39,6 +40,9 @@ public class MemberRegistController {
 	
     @Autowired
     private RedisTemplate<String, Guest> redisTemplate;
+    
+    @Autowired
+    private CoreWebApiService coreWebApiService;
 	
 	@ModelAttribute("memberEntryForm")
 	public MemberEntryForm setUpForm() {
@@ -69,10 +73,12 @@ public class MemberRegistController {
 			
 			redisTemplate.delete(form);
 			
-			guest.setBirthDay(savedGuest.getBirthDay());
+			guest.setBirthDayYear(savedGuest.getBirthDayYear());
+			guest.setBirthDayMonth(savedGuest.getBirthDayMonth());
+			guest.setBirthDayDay(savedGuest.getBirthDayDay());
 			
 			// TODO メールアドレスの連携はどうやる？
-			guest.setMailAddress("test-abc@aa.bb.cc.co.jp");
+			guest.setMailAddress("seiji.takahashi.901@ctc-g.co.jp");
 			
 			// セッション復元済みフラグをたてる
 			guest.setSessionRestored(true);
@@ -133,17 +139,23 @@ public class MemberRegistController {
 	 * @return
 	 */
 	@RequestMapping(value = "/register", params="register", method = RequestMethod.POST)
-	public String register(@RequestParam(required = false) boolean mailMagazineFg, RedirectAttributes attributes) {
+	public String register(@RequestParam(required = false) boolean fob, RedirectAttributes attributes) {
 		checkInvalidOperation();
 		
-		guest.setMailMagazineFg(mailMagazineFg);
+		guest.setLegalTou(true);
+		guest.setLegalPp(true);
+		guest.setFob(fob);
 		
-		//TODO Core APIによる会員登録処理
+		final SppMemberDetails req = guest.convertToSppMemberDetails();
+		// TODO 都道府県コードは現状必須のため固定で設定する。
+		req.setPrefectureCode("13");
+		final SppMemberDetails result = coreWebApiService.registerSppMember(req, false, true, null);
 		
 		final Guest member = guest.copy();
 		
 		// TODO APIで登録されたメンバー名
-		member.setMemberName("_apldk18d");
+		member.setMemberName(result.getMemberName());
+		//member.setMemberName("_apldk18d");
 		attributes.addFlashAttribute("member", member);
 		return "redirect:/Regist/finish";
 	}

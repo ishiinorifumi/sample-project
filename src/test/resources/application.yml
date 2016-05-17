@@ -42,6 +42,7 @@ spplogin:
     # COR-901 認証認可要求
     cor-901:
       path: /connect/authorize
+      redirect-url: http://dev.ssopen.disney.co.jp/auidauth/SessionKeyInfoUpd/
       client-id: dshar_aL7foR2yEn
       nonce: n-0S6_WzA2Mj
       response-type: "code id_token"

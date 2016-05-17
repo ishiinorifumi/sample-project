@@ -29,6 +29,7 @@ import jp.co.disney.spplogin.exception.ApplicationException;
 import jp.co.disney.spplogin.interceptor.MaintenanceInterceptor;
 import jp.co.disney.spplogin.interceptor.UserAgentInterceptor;
 import jp.co.disney.spplogin.web.model.Guest;
+import jp.co.disney.spplogin.web.model.ServiceInfo;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -72,6 +73,12 @@ public class AppConfig {
     @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public Guest guest() {
     	return new Guest();
+    }
+    
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public ServiceInfo serviceInfo() {
+    	return new ServiceInfo();
     }
     
     @Bean

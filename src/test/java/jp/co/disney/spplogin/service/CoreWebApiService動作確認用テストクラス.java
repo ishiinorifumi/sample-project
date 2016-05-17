@@ -1,6 +1,5 @@
 package jp.co.disney.spplogin.service;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import jp.co.disney.spplogin.Application;
 import jp.co.disney.spplogin.vo.SppMemberDetails;
 
-@Ignore("動作確認するときは@Ignoreをコメントアウトしてください。コミットするときは必ず戻してください。")
+//@Ignore("動作確認するときは@Ignoreをコメントアウトしてください。コミットするときは必ず戻してください。")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
@@ -31,7 +30,9 @@ public class CoreWebApiService動作確認用テストクラス {
 		String android = "Mozilla/5.0 (Linux; U; Android 2.2.1; en-us; Nexus One Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";
 		String iphone = "Mozilla /5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B5110e Safari/601.1";
 		
-		coreWebApiService.authorize("hirofumi.kai.0016@ctc-g.co.jp", "test123", android);
+		String dspp = "m3eK3TpVRrFhKgx92Kn9TlEgdpU6uHA2LdCUbU/tMLA=";
+		
+		coreWebApiService.authorize("hirofumi.kai.0016@ctc-g.co.jp", "test123", android, dspp);
 	}
 
 	/**
@@ -40,8 +41,8 @@ public class CoreWebApiService動作確認用テストクラス {
 	 */
 	@Test
 	public void getDidInformation() throws Exception {
-		//String didToken = "eyJhY2Nlc3NfdG9rZW4iOiJPRjNNOWJidFdoNW1HZmluRDNPb3ZRIiwiY2xpZW50SWQiOiJXREktSlAuSkEuU1BQLkdDLVNUQUdFIiwicmVmcmVzaF90b2tlbiI6InJrTGg0QXBIQXVsWjJWckJiT1E0WEEiLCJzd2lkIjoiOEYwQkM5MjktREE5My00MjBBLTg3RUQtQkRENzE2NTM4NDgxIiwidHRsIjo3MTk5fQ";
-		String didToken = "eyJhY2Nlc3NfdG9rZW4iOiI0WVg2V1IwbVFPRDJSU0FwQjViRFlBIiwiY2xpZW50SWQiOiJXREktSlAuSkEuU1BQLkdDLVNUQUdFIiwicmVmcmVzaF90b2tlbiI6Il9mQzF2Qy1MSTVTd0FfQnRTd3JGdWciLCJzd2lkIjoiOEYwQkM5MjktREE5My00MjBBLTg3RUQtQkRENzE2NTM4NDgxIiwidHRsIjo3MTk5fQ";
+		String didToken = "eyJhY2Nlc3NfdG9rZW4iOiJPRjNNOWJidFdoNW1HZmluRDNPb3ZRIiwiY2xpZW50SWQiOiJXREktSlAuSkEuU1BQLkdDLVNUQUdFIiwicmVmcmVzaF90b2tlbiI6InJrTGg0QXBIQXVsWjJWckJiT1E0WEEiLCJzd2lkIjoiOEYwQkM5MjktREE5My00MjBBLTg3RUQtQkRENzE2NTM4NDgxIiwidHRsIjo3MTk5fQ";
+		//String didToken = "eyJhY2Nlc3NfdG9rZW4iOiJHeHdKdjRJWjg1cUtYYTZ5dEZ4MHNBIiwiY2xpZW50SWQiOiJXREktSlAuSkEuU1BQLkdDLVNUQUdFIiwicmVmcmVzaF90b2tlbiI6IkRFeWxPNHotTVV3MWR1c2x5aXU1VWciLCJzd2lkIjoiOEYwQkM5MjktREE5My00MjBBLTg3RUQtQkRENzE2NTM4NDgxIiwidHRsIjo3MjAwfQ";
 		coreWebApiService.getDidInformation(didToken);
 	}
 	
@@ -53,7 +54,7 @@ public class CoreWebApiService動作確認用テストクラス {
 	public void registerSppMember() throws Exception {
 		
 		SppMemberDetails details = new SppMemberDetails();
-		details.setEmailAddress("seiji.takahashi.902@ctc-g.co.jp");
+		details.setEmailAddress("seiji.takahashi.900@ctc-g.co.jp");
 		details.setPassword("test123");
 		details.setGender("M");
 		details.setDateOfBirth("1950-01-01");
@@ -72,7 +73,7 @@ public class CoreWebApiService動作確認用テストクラス {
 	public void registerSppMemberDid() throws Exception {
 		
 		SppMemberDetails details = new SppMemberDetails();
-		details.setEmailAddress("seiji.takahashi.902@ctc-g.co.jp");
+		details.setEmailAddress("seiji.takahashi.900@ctc-g.co.jp");
 		details.setPassword("test123");
 		details.setGender("M");
 		details.setDateOfBirth("1950-01-01");

@@ -5,6 +5,7 @@ import java.time.Year;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -36,11 +38,11 @@ import jp.co.disney.spplogin.exception.ApplicationErrors;
 import jp.co.disney.spplogin.exception.ApplicationException;
 import jp.co.disney.spplogin.helper.URLDecodeHelper;
 import jp.co.disney.spplogin.service.CoreWebApiService;
-import jp.co.disney.spplogin.util.SecureRandomUtil;
 import jp.co.disney.spplogin.vo.DidMemberDetails;
 import jp.co.disney.spplogin.web.form.EmptyMailForm;
 import jp.co.disney.spplogin.web.form.LoginForm;
 import jp.co.disney.spplogin.web.model.Guest;
+import jp.co.disney.spplogin.web.model.ServiceInfo;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -75,6 +77,9 @@ public class LoginController {
 
 	@Autowired
 	private Guest guest;
+	
+	@Autowired
+	private ServiceInfo serviceInfo;
 
 	@Autowired
 	private RedisTemplate<String, Guest> redisTemplate;
@@ -112,7 +117,11 @@ public class LoginController {
 	 * ログイン／新規登録ページ表示
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public String loginOrRegistForm(Model model) {
+	public String loginOrRegistForm(@RequestParam(required = true) String dspp,
+			@RequestParam(value="service_name", required = true) String serviceName, Model model) {
+		serviceInfo.setDspp(dspp);
+		serviceInfo.setServiceName(serviceName);
+		log.info("dspp: {}", serviceInfo.getDspp());
 		return "login/login";
 	}
 
@@ -127,10 +136,9 @@ public class LoginController {
 			return "login/login";
 		}
 
-		log.info("SPPログイン処理を開始します。");
 		// 認証認可APIコール
 		final ResponseEntity<String> response = coreWebApiService.authorize(form.getMemberNameOrEmailAddr(),
-				form.getPassword(), userAgent);
+				form.getPassword(), userAgent, serviceInfo.getDspp());
 		
 		final URI redirectURL =  response.getHeaders().getLocation();
 		
@@ -177,11 +185,11 @@ public class LoginController {
 		}
 		
 		if(loginType.equals("did")) {
-			log.info("DIDログインに成功しました。");
-			log.info("DID会員のSPP会員新規登録を開始します。");
-			return sppRegisterAndLoginForDid(urlDecodeHelper.getQueryValue("did_token"), form.getMemberNameOrEmailAddr(), form.getPassword(), userAgent);
+			log.debug("DIDログインに成功しました。");
+			log.debug("DID会員のSPP会員新規登録を開始します。");
+			return sppRegisterAndLoginForDid(urlDecodeHelper.getQueryValue("did_token"), form.getMemberNameOrEmailAddr(), form.getPassword(), userAgent, serviceInfo.getDspp());
 		} else {
-			log.info("SPPログインに成功しました。");	
+			log.debug("SPPログインに成功しました。");	
 			return response;			
 		}
 	}
@@ -191,10 +199,10 @@ public class LoginController {
 	 * @param didToken　DIDトークン
 	 * @return ログイン結果レスポンス
 	 */
-	private ResponseEntity<String> sppRegisterAndLoginForDid(String didToken, String memberName, String password, String userAgent) {
+	private ResponseEntity<String> sppRegisterAndLoginForDid(String didToken, String memberName, String password, String userAgent, String dspp) {
 		final DidMemberDetails didMemberDetails = coreWebApiService.getDidInformation(didToken);
 		coreWebApiService.registerSppMember(didMemberDetails.convertToSppMemberDetails(), false, false, didToken);
-		return coreWebApiService.authorize(memberName, password, userAgent);
+		return coreWebApiService.authorize(memberName, password, userAgent, dspp);
 	}
 	
 	/**
@@ -208,7 +216,10 @@ public class LoginController {
 			return "login/login";
 		}
 
-		guest.setBirthDay(form.birthday("/"));
+		guest.setBirthDayYear(form.getBirthdayYear());
+		guest.setBirthDayMonth(form.getBirthdayMonth());
+		guest.setBirthDayDay(form.getBirthdayDay());
+		//guest.setBirthDay(form.birthday("/"));
 
 		return "redirect:/Login/emptymail";
 	}
@@ -231,7 +242,7 @@ public class LoginController {
 
 		final String coopKey;
 		if (session.getAttribute(SESSION_COOP_KEY) == null) {
-			coopKey = SecureRandomUtil.genToken();
+			coopKey = UUID.randomUUID().toString();
 			session.setAttribute(SESSION_COOP_KEY, coopKey);
 		} else {
 			coopKey = (String) session.getAttribute(SESSION_COOP_KEY);

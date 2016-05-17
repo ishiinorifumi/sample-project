@@ -9,6 +9,7 @@ import java.net.URI;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,6 +28,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import jp.co.disney.spplogin.Application;
+import jp.co.disney.spplogin.vo.DidMemberDetails;
+import jp.co.disney.spplogin.vo.SppMemberDetails;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -36,6 +39,9 @@ public class CoreWebApiServiceTest {
 
 	private static final String USER_AGENT = "Mozilla /5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B5110e Safari/601.1"; 
 	
+	@Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
 	@Rule
     public final MockitoRule rule = MockitoJUnit.rule();
 	
@@ -56,9 +62,91 @@ public class CoreWebApiServiceTest {
         
         when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
         
-		final ResponseEntity<String> res = coreWebApiService.authorize("hirofumi.kai.0016@ctc-g.co.jp", "test123", USER_AGENT);
+		final ResponseEntity<String> res = coreWebApiService.authorize("hirofumi.kai.0016@ctc-g.co.jp", "test123", USER_AGENT, "dspp");
 		
 		assertThat(res.getStatusCode(), is(HttpStatus.FOUND));
 		assertThat(res.getHeaders().getLocation(), is(notNullValue()));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getDidInformationメソッド_正常系() throws Exception {
+		HttpStatus status = HttpStatus.OK;
+        final String responseBody = "{\"did_member_details\":{\"address1\":null,\"address2\":null,\"age_band\":\"ADULT\",\"date_of_birth\":\"1990-12-30\",\"email_activation\":false,\"email_address\":\"hirofumi.kai.0032@ctc-g.co.jp\",\"first_name_kanji\":null,\"fob\":true,\"gender\":\"M\",\"guardian_email_address\":null,\"last_name_kanji\":null,\"legal_pp\":true,\"legal_tou\":true,\"login_status\":{\"is_authorized\":true,\"status\":[\"MARKETING_REQUIRED_FOB\"]},\"member_name\":\"_atgn_muwbjg_\",\"name_kana\":null,\"password\":null,\"phone_number\":null,\"postal_code\":\"1050001\",\"prefecture_code\":\"13\",\"swid\":\"8F0BC929-DA93-420A-87ED-BDD716538481\"},\"did_token\":{\"token\":\"eyJhY2Nlc3NfdG9rZW4iOiJHeHdKdjRJWjg1cUtYYTZ5dEZ4MHNBIiwiY2xpZW50SWQiOiJXREktSlAuSkEuU1BQLkdDLVNUQUdFIiwicmVmcmVzaF90b2tlbiI6IkRFeWxPNHotTVV3MWR1c2x5aXU1VWciLCJzd2lkIjoiOEYwQkM5MjktREE5My00MjBBLTg3RUQtQkRENzE2NTM4NDgxIiwidHRsIjo3MDI0fQ\"},\"status\":\"Success\"}";
+        ResponseEntity<String>  response = new ResponseEntity<>(responseBody, null, status);
+        
+        when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
+        
+        final DidMemberDetails res = coreWebApiService.getDidInformation("didToken");
+        
+        assertThat(res, is(notNullValue()));
+        assertThat(res.getDateOfBirth(), is("1990-12-30"));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void getDidInformationメソッド_異常系() throws Exception {
+		
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage("DID会員情報照会(COR-112)呼び出し時にエラーが発生しました。");
+        
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+        final String responseBody = "{\"error\":{\"code\":\"010107\",\"message\":\"Bad Request\",\"spp_message\":\"DIDトークン有効期限切れ\",\"status\":\"400\"},\"status\":\"Error\"}{\"error\":{\"code\":\"010107\",\"message\":\"Bad Request\",\"spp_message\":\"DIDトークン有効期限切れ\",\"status\":\"400\"},\"status\":\"Error\"}";
+        ResponseEntity<String>  response = new ResponseEntity<>(responseBody, null, status);
+        
+        when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
+        
+        coreWebApiService.getDidInformation("didToken");
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void registerSppMemberメソッド_正常系() throws Exception {
+		HttpStatus status = HttpStatus.CREATED;
+        final String responseBody = "{\"spp_member_details\":{\"address1\":null,\"address2\":null,\"address3\":null,\"age_band\":null,\"date_of_birth\":\"1950-01-01\",\"email_activation\":null,\"email_address\":\"seiji.takahashi.902@ctc-g.co.jp\",\"first_name_kanji\":null,\"fob\":true,\"gender\":\"M\",\"guardian_email_address\":null,\"is_premium_member\":false,\"last_name_kanji\":null,\"legal_pp\":true,\"legal_tou\":true,\"login_status\":null,\"member_name\":\"_atgn_muwbjg_\",\"member_status\":null,\"name_kana\":null,\"password\":\"test123\",\"phone_number\":null,\"postal_code\":null,\"prefecture_code\":\"13\",\"registration_required\":null,\"spp_exid\":null,\"spp_id\":null,\"swid\":null,\"xmid\":null},\"status\":\"Success\"}";
+        ResponseEntity<String>  response = new ResponseEntity<>(responseBody, null, status);
+        
+        when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
+        
+        final SppMemberDetails detail = new SppMemberDetails();
+        final SppMemberDetails res = coreWebApiService.registerSppMember(detail, true, true, null);
+        
+        assertThat(res, is(notNullValue()));
+        assertThat(res.getMemberName(), is("_atgn_muwbjg_"));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void registerSppMemberメソッド_正常系_DIDログイン() throws Exception {
+		HttpStatus status = HttpStatus.CREATED;
+        final String responseBody = "{\"spp_member_details\":{\"address1\":null,\"address2\":null,\"address3\":null,\"age_band\":null,\"date_of_birth\":\"1950-01-01\",\"email_activation\":null,\"email_address\":\"seiji.takahashi.902@ctc-g.co.jp\",\"first_name_kanji\":null,\"fob\":true,\"gender\":\"M\",\"guardian_email_address\":null,\"is_premium_member\":false,\"last_name_kanji\":null,\"legal_pp\":true,\"legal_tou\":true,\"login_status\":null,\"member_name\":\"_atgn_muwbjg_\",\"member_status\":null,\"name_kana\":null,\"password\":\"test123\",\"phone_number\":null,\"postal_code\":null,\"prefecture_code\":\"13\",\"registration_required\":null,\"spp_exid\":null,\"spp_id\":null,\"swid\":null,\"xmid\":null},\"status\":\"Success\"}";
+        ResponseEntity<String>  response = new ResponseEntity<>(responseBody, null, status);
+        
+        when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
+        
+        final SppMemberDetails detail = new SppMemberDetails();
+        final SppMemberDetails res = coreWebApiService.registerSppMember(detail, true, false, "did_token_xxx");
+        
+        assertThat(res, is(notNullValue()));
+        assertThat(res.getMemberName(), is("_atgn_muwbjg_"));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void registerSppMemberメソッド_異常系() throws Exception {
+		
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage("SPP会員新規登録(COR-001)呼び出し時にエラーが発生しました。");
+        
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+        final String responseBody = "{\"error\":{\"code\":\"010993\",\"message\":\"Bad Request\",\"spp_message\":\"入力パラメータ不正 : prefectureCode = null\",\"status\":\"400\"},\"status\":\"Error\"}";
+        ResponseEntity<String>  response = new ResponseEntity<>(responseBody, null, status);
+        
+        when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
+        
+        final SppMemberDetails detail = new SppMemberDetails();
+        coreWebApiService.registerSppMember(detail, true, true, null);
+
 	}
 }
