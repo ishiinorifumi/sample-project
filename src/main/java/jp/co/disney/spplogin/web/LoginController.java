@@ -2,22 +2,15 @@ package jp.co.disney.spplogin.web;
 
 import java.net.URI;
 import java.time.Year;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,7 +34,6 @@ import jp.co.disney.spplogin.vo.DidMemberDetails;
 import jp.co.disney.spplogin.web.form.EmptyMailForm;
 import jp.co.disney.spplogin.web.form.LoginForm;
 import jp.co.disney.spplogin.web.model.Guest;
-import jp.co.disney.spplogin.web.model.ServiceInfo;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -58,31 +49,9 @@ public class LoginController {
 	private final static String DEFAULT_BARTHDAY_YEAR = "1989";
 	private final static String DEFAULT_BARTHDAY_MONTH = "1";
 	private final static String DEFAULT_BARTHDAY_DAY = "1";
-	private final String SESSION_COOP_KEY = "spplogin.session-coop-key";
-
-	@Value("${spplogin.emptymail.domain}")
-	private String emptyMailDomain;
-
-	@Value("${spplogin.emptymail.account-prefix}")
-	private String accountPrefix;
-
-	@Value("${spplogin.emptymail.session-coop-key.expire}")
-	private int coopKeyExpire;
-
-	@Value("${spplogin.emptymail.session-coop-key.expire-timeunit}")
-	private String coopKeyExpireTimeUnit;
-
-	@Autowired
-	private HttpSession session;
 
 	@Autowired
 	private Guest guest;
-	
-	@Autowired
-	private ServiceInfo serviceInfo;
-
-	@Autowired
-	private RedisTemplate<String, Guest> redisTemplate;
 
 	@Autowired
 	private CoreWebApiService coreWebApiService;
@@ -119,9 +88,9 @@ public class LoginController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String loginOrRegistForm(@RequestParam(required = true) String dspp,
 			@RequestParam(value="service_name", required = true) String serviceName, Model model) {
-		serviceInfo.setDspp(dspp);
-		serviceInfo.setServiceName(serviceName);
-		log.info("dspp: {}", serviceInfo.getDspp());
+		guest.setDspp(dspp);
+		guest.setServiceName(serviceName);
+		log.debug("dspp: {}", dspp);
 		return "login/login";
 	}
 
@@ -138,7 +107,7 @@ public class LoginController {
 
 		// 認証認可APIコール
 		final ResponseEntity<String> response = coreWebApiService.authorize(form.getMemberNameOrEmailAddr(),
-				form.getPassword(), userAgent, serviceInfo.getDspp());
+				form.getPassword(), userAgent, guest.getDspp());
 		
 		final URI redirectURL =  response.getHeaders().getLocation();
 		
@@ -187,7 +156,7 @@ public class LoginController {
 		if(loginType.equals("did")) {
 			log.debug("DIDログインに成功しました。");
 			log.debug("DID会員のSPP会員新規登録を開始します。");
-			return sppRegisterAndLoginForDid(urlDecodeHelper.getQueryValue("did_token"), form.getMemberNameOrEmailAddr(), form.getPassword(), userAgent, serviceInfo.getDspp());
+			return sppRegisterAndLoginForDid(urlDecodeHelper.getQueryValue("did_token"), form.getMemberNameOrEmailAddr(), form.getPassword(), userAgent, guest.getDspp());
 		} else {
 			log.debug("SPPログインに成功しました。");	
 			return response;			
@@ -219,7 +188,6 @@ public class LoginController {
 		guest.setBirthDayYear(form.getBirthdayYear());
 		guest.setBirthDayMonth(form.getBirthdayMonth());
 		guest.setBirthDayDay(form.getBirthdayDay());
-		//guest.setBirthDay(form.birthday("/"));
 
 		return "redirect:/Login/emptymail";
 	}
@@ -230,30 +198,6 @@ public class LoginController {
 	@RequestMapping(value = "emptymail", method = RequestMethod.GET)
 	public String confirmEmptMailForm() {
 		return "login/sendEmptyMail";
-	}
-
-	/**
-	 * 空メール送信先アドレスを返す<br/>
-	 * これだけRestController
-	 */
-	@RequestMapping(value = "emptyMailAddress", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public ResponseEntity<Map<String, String>> sendEmptMail() {
-
-		final String coopKey;
-		if (session.getAttribute(SESSION_COOP_KEY) == null) {
-			coopKey = UUID.randomUUID().toString();
-			session.setAttribute(SESSION_COOP_KEY, coopKey);
-		} else {
-			coopKey = (String) session.getAttribute(SESSION_COOP_KEY);
-		}
-
-		redisTemplate.opsForValue().set(coopKey, guest.copy());
-		redisTemplate.expire(coopKey, coopKeyExpire, TimeUnit.valueOf(coopKeyExpireTimeUnit));
-
-		Map<String, String> res = new HashMap<>();
-		res.put("to_address", accountPrefix + coopKey + "@" + emptyMailDomain);
-		return new ResponseEntity<Map<String, String>>(res, HttpStatus.OK);
 	}
 
 }

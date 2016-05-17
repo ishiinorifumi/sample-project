@@ -37,6 +37,10 @@ public class Guest implements Serializable {
 	private boolean legalPp;
 	/** キャンペーンメール希望フラグ */
 	private boolean fob;
+	/** dspp */
+	private String dspp;
+	/** 遷移元サービス名称 */
+	private String serviceName;
 	/** セッション復元フラグ */
 	private boolean sessionRestored = false;
 	
@@ -61,6 +65,8 @@ public class Guest implements Serializable {
 				this.legalTou,
 				this.legalPp,
 				this.fob,
+				this.dspp,
+				this.serviceName,
 				this.sessionRestored);
 	}
 	

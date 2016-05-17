@@ -1,6 +1,5 @@
 package jp.co.disney.spplogin.web;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,6 @@ import jp.co.disney.spplogin.web.model.Guest;
 @RequestMapping("Regist")
 @SessionAttributes("scopedTarget.guest")
 public class MemberRegistController {
-
-	/** トランザクショントークンをセッションに格納するためのキー */
-	private static String tranTokenSessionKey = "spplogin.tran-token-session-key";
-	
-	@Autowired
-	private HttpSession session;
 	
 	@Autowired
 	private Guest guest;
@@ -77,8 +70,8 @@ public class MemberRegistController {
 			guest.setBirthDayMonth(savedGuest.getBirthDayMonth());
 			guest.setBirthDayDay(savedGuest.getBirthDayDay());
 			
-			// TODO メールアドレスの連携はどうやる？
-			guest.setMailAddress("seiji.takahashi.901@ctc-g.co.jp");
+			//guest.setMailAddress("seiji.takahashi.901@ctc-g.co.jp");
+			guest.setMailAddress(savedGuest.getMailAddress());
 			
 			// セッション復元済みフラグをたてる
 			guest.setSessionRestored(true);
