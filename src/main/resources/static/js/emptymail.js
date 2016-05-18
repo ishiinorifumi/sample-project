@@ -6,7 +6,7 @@
 			//alert(ret.to_address);
 			$("#to-address").text(ret.to_address);
 			var resUrl = location.protocol + "//" + location.host + "/"
-			+ "spplogin/Regist?form=" + ret.to_address.split("+")[1].split("@")[0];
+			+ "spplogin/Regist?form=" + ret.to_address.split("_")[1].split("@")[0];
 			
 			$("#response-url").html("<a href='" + resUrl + "'>" + resUrl + "</a>");
 			$("#empty-mail-dialog").dialog("open");

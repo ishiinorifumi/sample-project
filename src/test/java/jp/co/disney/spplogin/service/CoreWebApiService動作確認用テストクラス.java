@@ -55,7 +55,8 @@ public class CoreWebApiService動作確認用テストクラス {
 		
 		SppMemberDetails details = new SppMemberDetails();
 		details.setEmailAddress("seiji.takahashi.900@ctc-g.co.jp");
-		details.setPassword("test123");
+		details.setMemberName("seiji.takahashi.909@ctc-g.co.jp");
+		details.setPassword("test@123");
 		details.setGender("M");
 		details.setDateOfBirth("1950-01-01");
 		details.setFob(true);

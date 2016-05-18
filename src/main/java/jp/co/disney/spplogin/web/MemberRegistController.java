@@ -70,8 +70,8 @@ public class MemberRegistController {
 			guest.setBirthDayMonth(savedGuest.getBirthDayMonth());
 			guest.setBirthDayDay(savedGuest.getBirthDayDay());
 			
-			//guest.setMailAddress("seiji.takahashi.901@ctc-g.co.jp");
-			guest.setMailAddress(savedGuest.getMailAddress());
+			guest.setMailAddress("seiji.takahashi.901@ctc-g.co.jp");
+			//guest.setMailAddress(savedGuest.getMailAddress());
 			
 			// セッション復元済みフラグをたてる
 			guest.setSessionRestored(true);

@@ -10,3 +10,12 @@ emptymail:
    domain: disney.jp
    account:
       prefix: SPPLOGIN+
+spplogin:
+  base-url: http://dev.ssapi.disney.co.jp/spplogin/
+  core-webapi:
+    proxy:
+      enable: false
+    base-url: http://localhost
+    port: 80
+    cor-901:
+      redirect-url: http://dev.ssopen.disney.co.jp/auidauth/SessionKeyInfoUpd/

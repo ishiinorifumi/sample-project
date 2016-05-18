@@ -14,19 +14,30 @@ spring:
     basename: messages
     cache-seconds: -1
     encoding: UTF-8
+# Mail
+  mail:
+    host: localhost
+    port: 25
+  velocity:
+    enabled: false
 server:
    port: 8080
    context-path: /spplogin
-
 # アプリ固有設定
 spplogin:
+  base-url: http://localhost:8080/spplogin/
   # 空メール関連
   emptymail:
     session-coop-key:
+      prefix: a1-
       expire: 24
       expire-timeunit: HOURS
-    domain: disney.jp
-    account-prefix: SPPLOGIN+
+    domain: mail.disney.jp
+    account-prefix: sslogin-account
+    account-separator: _
+    auto-reply:
+      from-address: sslogin-register@mail.disney.jp
+      subject: 【ディズニーシェア】新規メンバー登録
   # CORE WebAPI関連
   core-webapi:
     proxy:

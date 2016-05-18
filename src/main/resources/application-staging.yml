@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: 127.0.0.1
+    host: dccore-stg-dbcc.c88wn7.0001.apne1.cache.amazonaws.com
     port: 6379
 tomcat:
   ajp:
@@ -10,3 +10,12 @@ emptymail:
    domain: disney.jp
    account:
       prefix: SPPLOGIN+
+spplogin:
+  base-url: http://stg.ssapi.disney.co.jp/spplogin/
+  core-webapi:
+    proxy:
+      enable: false
+    base-url: http://localhost
+    port: 80
+    cor-901:
+      redirect-url: https://staging.ssopen.disney.co.jp/auidauth/SessionKeyInfoUpd/
