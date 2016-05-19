@@ -28,6 +28,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import jp.co.disney.spplogin.Application;
+import jp.co.disney.spplogin.exception.SppMemberRegisterException;
 import jp.co.disney.spplogin.vo.DidMemberDetails;
 import jp.co.disney.spplogin.vo.SppMemberDetails;
 
@@ -110,7 +111,7 @@ public class CoreWebApiServiceTest {
         when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
         
         final SppMemberDetails detail = new SppMemberDetails();
-        final SppMemberDetails res = coreWebApiService.registerSppMember(detail, true, true, null);
+        final SppMemberDetails res = coreWebApiService.registerSppMember(detail, false, true, null);
         
         assertThat(res, is(notNullValue()));
         assertThat(res.getMemberName(), is("_atgn_muwbjg_"));
@@ -126,7 +127,7 @@ public class CoreWebApiServiceTest {
         when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
         
         final SppMemberDetails detail = new SppMemberDetails();
-        final SppMemberDetails res = coreWebApiService.registerSppMember(detail, true, false, "did_token_xxx");
+        final SppMemberDetails res = coreWebApiService.registerSppMember(detail, false, false, "did_token_xxx");
         
         assertThat(res, is(notNullValue()));
         assertThat(res.getMemberName(), is("_atgn_muwbjg_"));
@@ -136,17 +137,17 @@ public class CoreWebApiServiceTest {
 	@Test
 	public void registerSppMemberメソッド_異常系() throws Exception {
 		
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("SPP会員新規登録(COR-001)呼び出し時にエラーが発生しました。");
+        expectedException.expect(SppMemberRegisterException.class);
+        expectedException.expectMessage("[SPC003]SPP新規会員登録に失敗しました。:メンバー名使用不可エラー(010776)");
         
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-        final String responseBody = "{\"error\":{\"code\":\"010993\",\"message\":\"Bad Request\",\"spp_message\":\"入力パラメータ不正 : prefectureCode = null\",\"status\":\"400\"},\"status\":\"Error\"}";
+        final String responseBody = "{\"error\":{\"code\":\"010776\",\"message\":\"Bad Request\",\"spp_message\":\"メンバー名使用不可エラー\",\"status\":\"400\"},\"status\":\"Error\"}";
         ResponseEntity<String>  response = new ResponseEntity<>(responseBody, null, status);
         
         when(restTemplate.exchange(any(URI.class), any(HttpMethod.class), any(HttpEntity.class), (Class<String>) any())).thenReturn(response);
         
         final SppMemberDetails detail = new SppMemberDetails();
-        coreWebApiService.registerSppMember(detail, true, true, null);
+        coreWebApiService.registerSppMember(detail, false, true, null);
 
 	}
 }

@@ -29,6 +29,11 @@
 							th:text="${e.message}" />
 					</ul>
 				</div>
+				<div th:if="${memberRegistApiErrorMsg}" class="error-message-area">
+					<ul>
+						<li th:text="${memberRegistApiErrorMsg}" />
+					</ul>
+				</div>
 			</div>
 		</div>
 		<div class="row">

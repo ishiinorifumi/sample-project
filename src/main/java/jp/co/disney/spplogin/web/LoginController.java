@@ -170,7 +170,7 @@ public class LoginController {
 	 */
 	private ResponseEntity<String> sppRegisterAndLoginForDid(String didToken, String memberName, String password, String userAgent, String dspp) {
 		final DidMemberDetails didMemberDetails = coreWebApiService.getDidInformation(didToken);
-		coreWebApiService.registerSppMember(didMemberDetails.convertToSppMemberDetails(), false, false, didToken);
+		coreWebApiService.registerSppMember(didMemberDetails.convertToSppMemberDetails(), true, false, didToken);
 		return coreWebApiService.authorize(memberName, password, userAgent, dspp);
 	}
 	

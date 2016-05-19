@@ -1,7 +1,10 @@
 package jp.co.disney.spplogin.controller;
 
+
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.UUID;
@@ -15,6 +18,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import jp.co.disney.spplogin.Application;
 import jp.co.disney.spplogin.service.CoreWebApiService;
+import jp.co.disney.spplogin.vo.SppMemberDetails;
 import jp.co.disney.spplogin.web.MemberRegistController;
 import jp.co.disney.spplogin.web.model.Guest;
 import lombok.AllArgsConstructor;
@@ -60,7 +65,7 @@ public class MemberRegistControllerTest {
 	
 	@Mock
 	@Autowired
-    private CoreWebApiService coreWebApiService;
+	private CoreWebApiService coreWebApiService;
 	
 	@InjectMocks
 	@Autowired
@@ -69,9 +74,9 @@ public class MemberRegistControllerTest {
     @Before
     public void before() throws Exception {
     	new TestContextManager(this.getClass()).prepareTestInstance(this);
-    	this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();   	
+    	this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    	MockitoAnnotations.initMocks(this);
     }
-    
     
     @Test
     public void 登録入力画面表示() throws Exception {
@@ -108,24 +113,40 @@ public class MemberRegistControllerTest {
     	.andExpect(model().hasErrors())
     	.andExpect(fixture.resultMatcher)
     	.andExpect(view().name(is("memberregist/entry")));
-    	
     }
  
     @Test
-    public void 登録確認_OK() throws Exception {
+    public void 登録確認OK_許容文字その１() throws Exception {
     	
     	登録入力画面表示();
     	
+    	when(coreWebApiService.registerSppMember(anyObject(), anyBoolean(), anyBoolean(), anyString())).thenReturn(new SppMemberDetails());
+    	
     	this.mockMvc.perform(MockMvcRequestBuilders.post("/Regist")
-    			.param("password", "test123")
-    			.param("confirmPassword", "test123")
+    			.param("password", "_#$%^&*()+{}[]|;azAZ09")
+    			.param("confirmPassword", "_#$%^&*()+{}[]|;azAZ09")
     			.param("gender", "F")
     			.session(mockHttpSession))
     	.andExpect(status().isFound())
     	.andExpect(redirectedUrl("/Regist/confirm"));
-    	
     }
 
+    @Test
+    public void 登録確認OK_許容文字その２() throws Exception {
+    	
+    	登録入力画面表示();
+    	
+    	when(coreWebApiService.registerSppMember(anyObject(), anyBoolean(), anyBoolean(), anyString())).thenReturn(new SppMemberDetails());
+    	
+    	this.mockMvc.perform(MockMvcRequestBuilders.post("/Regist")
+    			.param("password", "~`<>?:.-@/abc123")
+    			.param("confirmPassword", "~`<>?:.-@/abc123")
+    			.param("gender", "F")
+    			.session(mockHttpSession))
+    	.andExpect(status().isFound())
+    	.andExpect(redirectedUrl("/Regist/confirm"));
+    }
+    
     /**
      * バリデーションエラーテスト用Fixture
      *
@@ -141,18 +162,28 @@ public class MemberRegistControllerTest {
     @DataPoints
     public static ValidationErrorTestFixture[] geFixture() {
     	return new ValidationErrorTestFixture[] {
+    			// パスワード未設定
+    			new ValidationErrorTestFixture("", "12345", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Size")),
     			// パスワードが短い
-    			new ValidationErrorTestFixture("12345", "12345", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Size")),
+    			new ValidationErrorTestFixture("a1234", "a1234", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Size")),
     			// パスワードが長い
-    			new ValidationErrorTestFixture("12345678901234567890123456", "12345678901234567890123456", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Size")),
+    			new ValidationErrorTestFixture("a1234567890123456789012345", "a1234567890123456789012345", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Size")),
     			// パスワード使用禁止文字 記号
-    			new ValidationErrorTestFixture("test@123", "test@123", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Pattern")),
+    			new ValidationErrorTestFixture("test!123", "tes!123", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Pattern")),
     			// パスワード使用禁止文字 マルチバイト
     			new ValidationErrorTestFixture("あいうえおかきくけこ", "あいうえおかきくけこ", "F", model().attributeHasFieldErrorCode("memberEntryForm", "password", "Pattern")),
+    			// パスワード（確認）必須
+    			new ValidationErrorTestFixture("test123", "", "M", model().attributeHasFieldErrorCode("memberEntryForm", "confirmPassword", "NotBlank")),
     			// パスワード確認フィールドと不一致
     			new ValidationErrorTestFixture("test123", "test124", "F", model().attributeHasFieldErrorCode("memberEntryForm", "validConfirmPassword", "AssertTrue")),
+    			// パスワードがアルファベットだけ
+    			new ValidationErrorTestFixture("abcAbc", "abcAbc", "F", model().attributeHasFieldErrorCode("memberEntryForm", "validPassword", "AssertTrue")),
+    			// パスワードが数値だけ
+    			new ValidationErrorTestFixture("0123456789", "0123456789", "F", model().attributeHasFieldErrorCode("memberEntryForm", "validPassword", "AssertTrue")),
+    			// パスワードが記号だけ
+    			new ValidationErrorTestFixture("_#$%^&*()+{}[]|;~`<>?:.-@", "_#$%^&*()+{}[]|;~`<>?:.-@", "F", model().attributeHasFieldErrorCode("memberEntryForm", "validPassword", "AssertTrue")),
     			// 性別必須
-    			new ValidationErrorTestFixture("test123", "test123", "", model().attributeHasFieldErrorCode("memberEntryForm", "gender", "NotBlank")),
+    			new ValidationErrorTestFixture("test123", "test123", "", model().attributeHasFieldErrorCode("memberEntryForm", "gender", "Pattern")),
     			// 性別は M or F
     			new ValidationErrorTestFixture("test123", "test123", "A", model().attributeHasFieldErrorCode("memberEntryForm", "gender", "Pattern"))
     	};
