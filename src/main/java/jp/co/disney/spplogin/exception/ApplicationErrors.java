@@ -6,7 +6,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ApplicationErrors {
 
-	INVALID_MAIL_ADDRESS("SPC001", "お使いのメールアドレスは使用できません。：{0}"),
+	INVALID_FORMAT_MAIL_ADDRESS("SPC001", "お使いのメールアドレスは不正な形式のためご使用いただけません。：{0}"),
+	DUPLICATE_MAIL_ADDRESS("SPC001", "お使いのメールアドレスは既に登録されています。：{0}"),
+	INVALID_DOMAIN_MAIL_ADDRESS("SPC001", "お使いのメールアドレスのドメイン（@以降）ではご使用いただけません。：{0}"),
 	INVALID_URL("SPC002", "ご指定のURLは有効ではありません。"),
 	MEMBER_REGISTER_FAILED("SPC003", "SPP新規会員登録に失敗しました。:{0}"),
 	INVALID_PARAMETER("SPC902", "パラメータの値が正しくありません。"),

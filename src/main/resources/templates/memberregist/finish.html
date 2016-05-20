@@ -54,9 +54,14 @@
 			</div>
 		</div>
 		<div class="row" style="margin-top:10px;">
-			<div class="col-xs-12">
-				<button type="button" class="btn btn-cyan600_rsd btn-block">ディズニーシェアをたのしむ</button>
-			</div>
+			<form th:action="@{/Regist}" name="login"  method="POST">
+				<div class="col-xs-12">
+					<button type="button" class="btn btn-cyan600_rsd btn-block" th:text="${member.getServiceName()}">ディズニーシェアをたのしむ</button>
+				</div>
+				<input type="hidden" name="memberName" th:value="${member.getMemberName()}" />
+				<input type="hidden" name="password" th:value="${member.getPassword()}" />
+				<input type="hidden" name="dspp" th:value="${member.getDspp()}" />
+			</form>
 		</div>
 		<hr />
 		<div class="row">

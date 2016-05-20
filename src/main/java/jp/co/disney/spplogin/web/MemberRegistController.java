@@ -4,10 +4,12 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jp.co.disney.spplogin.enums.CoreApiErrors;
 import jp.co.disney.spplogin.enums.Gender;
 import jp.co.disney.spplogin.exception.ApplicationErrors;
 import jp.co.disney.spplogin.exception.ApplicationException;
 import jp.co.disney.spplogin.exception.SppMemberRegisterException;
+import jp.co.disney.spplogin.helper.EmailAddressValidator;
 import jp.co.disney.spplogin.service.CoreWebApiService;
 import jp.co.disney.spplogin.vo.SppMemberDetails;
 import jp.co.disney.spplogin.web.form.MemberEntryForm;
@@ -31,17 +35,14 @@ import lombok.extern.slf4j.Slf4j;
 @SessionAttributes("scopedTarget.guest")
 public class MemberRegistController {
 	
-	/** SPP会員登録 パスワードフォーマットエラーコード */
-	private final static String INVALID_PASSWORD_ERROR_CODE = "010930";
-	
-	/** SPP会員登録 メンバー名使用不可エラーコード */
-	private final static String UNUSABLE_MEMBER_NAME_ERROR_CODE = "010776";
-	
 	@Autowired
 	private Guest guest;
 	
     @Autowired
     private RedisTemplate<String, Guest> redisTemplate;
+    
+    @Autowired
+    private EmailAddressValidator emailAddressValidator;
     
     @Autowired
     private CoreWebApiService coreWebApiService;
@@ -70,18 +71,22 @@ public class MemberRegistController {
 	public String entryForm(@RequestParam(required = true) String form, Model model) {
 		if(!guest.isSessionRestored()){
 			final Guest savedGuest = redisTemplate.opsForValue().get(form);
-			if(savedGuest == null)
+			if(savedGuest == null) {
+				// 無効なURL
 				throw new ApplicationException(ApplicationErrors.INVALID_URL);
+			}
 			
 			redisTemplate.delete(form);
+			
+			// TODO 空メール連携実装後は削除する。
+			savedGuest.setMailAddress("seiji.takahashi.903@docomo.ne.jp");
+			
+			emailAddressValidator.validate(savedGuest.getMailAddress());
 			
 			guest.setBirthDayYear(savedGuest.getBirthDayYear());
 			guest.setBirthDayMonth(savedGuest.getBirthDayMonth());
 			guest.setBirthDayDay(savedGuest.getBirthDayDay());
-			
-			//guest.setMailAddress("seiji.takahashi.909@ctc-g.co.jp");
 			guest.setMailAddress(savedGuest.getMailAddress());
-			
 			// セッション復元済みフラグをたてる
 			guest.setSessionRestored(true);
 			
@@ -125,16 +130,12 @@ public class MemberRegistController {
 			log.warn("SPP会員新規登録判定でエラーとなりました。 {}", e.getErrorDetail());
 			final String errorCode = e.getErrorDetail().get("code");
 			String dispErrorMessage = "";
-			switch(errorCode) {
-				case INVALID_PASSWORD_ERROR_CODE :
+				if(errorCode.equals(CoreApiErrors.INVALID_PASSWORD_FORMAT.getCode())) {
 					dispErrorMessage = "パスワードは6文字以上25文字以下で登録してください。英字と数字（または!#$%^&*などの記号）がそれぞれ1文字以上必要です。お名前や生年月日などの個人情報は使用しないでください。";
-					break;
-				case UNUSABLE_MEMBER_NAME_ERROR_CODE :
+				} else if(errorCode.equals(CoreApiErrors.UNUSABLE_MEMBER_NAME_ERROR.getCode())) {
 					dispErrorMessage = "このメールアドレスは既に使用されています。";
-					break;
-				default :
+				} else {
 					dispErrorMessage = e.getErrorDetail().get("spp_message");
-					break;
 			}
 			 // ログイン失敗。メンバー名またはパスワード不正
 			model.addAttribute("memberRegistApiErrorMsg", dispErrorMessage);
@@ -181,7 +182,7 @@ public class MemberRegistController {
 		final SppMemberDetails req = guest.convertToSppMemberDetails();
 		// TODO 都道府県コードは現状必須のため固定で設定する。
 		req.setPrefectureCode("13");
-		final SppMemberDetails result = coreWebApiService.registerSppMember(req, true, true, null);
+		final SppMemberDetails result = coreWebApiService.registerSppMember(req, false, true, null);
 		
 		final Guest member = guest.copy();
 		
@@ -202,6 +203,16 @@ public class MemberRegistController {
 		// セッションを破棄
 		sessionStatus.setComplete();
 		return "memberregist/finish";
+	}
+	
+	@RequestMapping(params = "login", method = RequestMethod.POST)
+	public ResponseEntity<String> redirectService(
+			@RequestParam(required = true) String memberName,
+			@RequestParam(required = true) String password,
+			@RequestParam(required = true) String dspp,
+			@RequestHeader("User-Agent") String userAgent) {
+		
+		return coreWebApiService.authorize(memberName, password, userAgent, dspp);
 	}
 	
 	/**
