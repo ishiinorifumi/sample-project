@@ -127,21 +127,22 @@ public class EmailAddressValidatorTest {
     @DataPoints
     public static String[] getFixture() {
     	return new String[] {
-    			"user@docomo.ne.jp",
-    			"user@disneymobile.ne.jp",
-    			"user@softbank.ne.jp",
-    			"user@i.softbank.jp",
-    			"user@d.vodafone.ne.jp",
-    			"user@h.vodafone.ne.jp",
-    			"user@t.vodafone.ne.jp",
-    			"user@c.vodafone.ne.jp",
-    			"user@r.vodafone.ne.jp",
-    			"user@k.vodafone.ne.jp",
-    			"user@n.vodafone.ne.jp",
-    			"user@s.vodafone.ne.jp",
-    			"user@q.vodafone.ne.jp",
-    			"user@ezweb.ne.jp",
-    			"user@disney.ne.jp"
+    			"user.18dklahcosaf@docomo.ne.jp",
+    			"user.18dklahcosaf@disneymobile.ne.jp",
+    			"user.18dklahcosaf@softbank.ne.jp",
+    			"user.18dklahcosaf@i.softbank.jp",
+    			"user.18dklahcosaf@d.vodafone.ne.jp",
+    			"user.18dklahcosaf@h.vodafone.ne.jp",
+    			"user.18dklahcosaf@t.vodafone.ne.jp",
+    			"user.18dklahcosaf@c.vodafone.ne.jp",
+    			"user.18dklahcosaf@r.vodafone.ne.jp",
+    			"user.18dklahcosaf@k.vodafone.ne.jp",
+    			"user.18dklahcosaf@n.vodafone.ne.jp",
+    			"user.18dklahcosaf@s.vodafone.ne.jp",
+    			"user.18dklahcosaf@q.vodafone.ne.jp",
+    			"user.18dklahcosaf@ezweb.ne.jp",
+    			"user.18dklahcosaf@disney.ne.jp",
+    			"user.18dklahcosaf@gmail.com"
     	};
     } 
     

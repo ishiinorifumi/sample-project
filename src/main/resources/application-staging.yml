@@ -6,16 +6,16 @@ tomcat:
   ajp:
     enabled: true
     port: 8009
-emptymail:
-   domain: disney.jp
-   account:
-      prefix: SPPLOGIN+
 spplogin:
-  base-url: http://stg.ssapi.disney.co.jp/spplogin/
+  emptymail:
+    domain: stg.msg.disney.co.jp
+    session-coop-key:
+      expire: 10
+      expire-timeunit: MINUTES
   core-webapi:
     proxy:
       enable: false
-    base-url: http://localhost
+    base-url: http://stg.ssapi.disney.co.jp/spplogin/
     port: 80
     cor-901:
       redirect-url: https://staging.ssopen.disney.co.jp/auidauth/SessionKeyInfoUpd/

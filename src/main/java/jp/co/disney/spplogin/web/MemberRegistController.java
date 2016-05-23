@@ -78,9 +78,6 @@ public class MemberRegistController {
 			
 			redisTemplate.delete(form);
 			
-			// TODO 空メール連携実装後は削除する。
-			savedGuest.setMailAddress("seiji.takahashi.903@docomo.ne.jp");
-			
 			emailAddressValidator.validate(savedGuest.getMailAddress());
 			
 			guest.setBirthDayYear(savedGuest.getBirthDayYear());
@@ -182,13 +179,13 @@ public class MemberRegistController {
 		final SppMemberDetails req = guest.convertToSppMemberDetails();
 		// TODO 都道府県コードは現状必須のため固定で設定する。
 		req.setPrefectureCode("13");
-		final SppMemberDetails result = coreWebApiService.registerSppMember(req, false, true, null);
+		final SppMemberDetails result = coreWebApiService.registerSppMember(req, true, true, null);
 		
 		final Guest member = guest.copy();
 		
-		// TODO APIで登録されたメンバー名
+		// 登録されたメンバー名
 		member.setMemberName(result.getMemberName());
-		//member.setMemberName("_apldk18d");
+		
 		attributes.addFlashAttribute("member", member);
 		return "redirect:/Regist/finish";
 	}
@@ -205,6 +202,14 @@ public class MemberRegistController {
 		return "memberregist/finish";
 	}
 	
+	/**
+	 * ログイン後、呼び出し元サービスに戻る
+	 * @param memberName メンバー名
+	 * @param password パスワード
+	 * @param dspp DSPP
+	 * @param userAgent ユーザエージェント
+	 * @return
+	 */
 	@RequestMapping(params = "login", method = RequestMethod.POST)
 	public ResponseEntity<String> redirectService(
 			@RequestParam(required = true) String memberName,

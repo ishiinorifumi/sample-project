@@ -7,6 +7,8 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -19,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import jp.co.disney.spplogin.Application;
+import jp.co.disney.spplogin.enums.CoreApiErrors;
+import jp.co.disney.spplogin.exception.SppMemberRegisterException;
+import jp.co.disney.spplogin.helper.EmailAddressValidator;
 import jp.co.disney.spplogin.service.CoreWebApiService;
 import jp.co.disney.spplogin.vo.SppMemberDetails;
 import jp.co.disney.spplogin.web.MemberRegistController;
@@ -63,8 +69,10 @@ public class MemberRegistControllerTest {
 	@Autowired
 	private Guest guest;
 	
+	@Spy
+	private EmailAddressValidator emailAddressValidator;
+	
 	@Mock
-	@Autowired
 	private CoreWebApiService coreWebApiService;
 	
 	@InjectMocks
@@ -80,6 +88,9 @@ public class MemberRegistControllerTest {
     
     @Test
     public void 登録入力画面表示() throws Exception {
+    	
+    	doReturn(true).when(emailAddressValidator).validate(anyString());
+    	
     	final Guest wGuest = new Guest();
     	wGuest.setBirthDayYear("1972");
     	wGuest.setBirthDayMonth("10");
@@ -97,6 +108,46 @@ public class MemberRegistControllerTest {
     	assertThat(wGuest.getBirthDay(), is(this.guest.getBirthDay()));
     	assertThat(wGuest.getMailAddress(), is(this.guest.getMailAddress()));
     	assertThat(this.guest.isSessionRestored(), is(true));
+    	
+    	verify(emailAddressValidator).validate(anyString());
+    }
+    
+    @Test
+    public void 登録確認_CoreAPIパスワードフォーマットエラー() throws Exception {
+    	登録入力画面表示();
+    	
+    	final Map<String, String> errorDetail = new HashMap<>();
+    	errorDetail.put("code", CoreApiErrors.INVALID_PASSWORD_FORMAT.getCode());
+    	final SppMemberRegisterException exception = new SppMemberRegisterException(errorDetail);
+    	
+    	when(coreWebApiService.registerSppMember(anyObject(), anyBoolean(), anyBoolean(), anyString())).thenThrow(exception);
+    	
+    	this.mockMvc.perform(MockMvcRequestBuilders.post("/Regist")
+    			.param("password", "test123")
+    			.param("confirmPassword", "test123")
+    			.param("gender", "M")
+    			.session(mockHttpSession))
+    	.andExpect(status().isOk())
+    	.andExpect(model().attribute("memberRegistApiErrorMsg", is("パスワードは6文字以上25文字以下で登録してください。英字と数字（または!#$%^&*などの記号）がそれぞれ1文字以上必要です。お名前や生年月日などの個人情報は使用しないでください。")));
+    }
+    
+    @Test
+    public void 登録確認_CoreAPIメールアドレス二重登録() throws Exception {
+    	登録入力画面表示();
+    	
+    	final Map<String, String> errorDetail = new HashMap<>();
+    	errorDetail.put("code", CoreApiErrors.UNUSABLE_MEMBER_NAME_ERROR.getCode());
+    	final SppMemberRegisterException exception = new SppMemberRegisterException(errorDetail);
+    	
+    	when(coreWebApiService.registerSppMember(anyObject(), anyBoolean(), anyBoolean(), anyString())).thenThrow(exception);
+    	
+    	this.mockMvc.perform(MockMvcRequestBuilders.post("/Regist")
+    			.param("password", "test123")
+    			.param("confirmPassword", "test123")
+    			.param("gender", "M")
+    			.session(mockHttpSession))
+    	.andExpect(status().isOk())
+    	.andExpect(model().attribute("memberRegistApiErrorMsg", is("このメールアドレスは既に使用されています。")));
     }
     
     @Theory
@@ -114,7 +165,7 @@ public class MemberRegistControllerTest {
     	.andExpect(fixture.resultMatcher)
     	.andExpect(view().name(is("memberregist/entry")));
     }
- 
+    
     @Test
     public void 登録確認OK_許容文字その１() throws Exception {
     	

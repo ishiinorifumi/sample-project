@@ -38,6 +38,7 @@ public class EmailAddressValidator {
 		validDomains.add("q.vodafone.ne.jp");
 		validDomains.add("ezweb.ne.jp");
 		validDomains.add("disney.ne.jp");
+		validDomains.add("gmail.com");
 	}
 	
 	@Autowired
@@ -73,7 +74,6 @@ public class EmailAddressValidator {
 			final String code = error.get("code");
 			if(code.equals(CoreApiErrors.UNUSABLE_MEMBER_NAME_ERROR.getCode())) {
 				// メールアドレス重複
-				log.debug("メールアドレス不正");
 				throw new ApplicationException(ApplicationErrors.DUPLICATE_MAIL_ADDRESS, emailAddress);
 			} else if(code.equals(CoreApiErrors.INVALID_FORMAT_MAIL_ADDRESS.getCode())){
 				// メールアドレスフォーマット不正

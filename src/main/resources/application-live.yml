@@ -6,12 +6,12 @@ tomcat:
   ajp:
     enabled: true
     port: 8009
-emptymail:
-   domain: disney.jp
-   account:
-      prefix: SPPLOGIN+
 spplogin:
-  base-url: http://stg.ssapi.disney.co.jp/spplogin/
+  emptymail:
+    domain: mail.disney.jp
+    session-coop-key:
+      expire: 24
+      expire-timeunit: HOURS
   core-webapi:
     proxy:
       enable: false

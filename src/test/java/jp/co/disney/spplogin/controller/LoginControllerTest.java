@@ -59,7 +59,7 @@ public class LoginControllerTest {
 	private LoginController controller;
 	
     @Before
-    public void before() {
+    public void setUp() {
         //this.mockMvc = MockMvcBuilders.standaloneSetup(this.controller).build();
     	this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     	//mockHttpSession = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
