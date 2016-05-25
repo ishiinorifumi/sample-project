@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -71,7 +72,7 @@ public class MemberRegistController {
 	public String entryForm(@RequestParam(required = true) String form, Model model) {
 		if(!guest.isSessionRestored()){
 			final Guest savedGuest = redisTemplate.opsForValue().get(form);
-			if(savedGuest == null) {
+			if(savedGuest == null || StringUtils.isEmpty(savedGuest.getMailAddress())) {
 				// 無効なURL
 				throw new ApplicationException(ApplicationErrors.INVALID_URL);
 			}

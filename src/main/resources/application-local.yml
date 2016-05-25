@@ -15,6 +15,7 @@ tomcat:
 spplogin:
   # 空メール関連
   emptymail:
+    domain: dev.msg.disney.co.jp
     session-coop-key:
       expire: 10
       expire-timeunit: MINUTES

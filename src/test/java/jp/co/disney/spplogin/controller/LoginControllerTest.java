@@ -1,5 +1,6 @@
 package jp.co.disney.spplogin.controller;
 
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -30,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 import jp.co.disney.spplogin.Application;
 import jp.co.disney.spplogin.service.CoreWebApiService;
 import jp.co.disney.spplogin.web.LoginController;
+import jp.co.disney.spplogin.web.model.Guest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -43,6 +45,9 @@ public class LoginControllerTest {
     public final MockitoRule rule = MockitoJUnit.rule();
 	
 	private MockMvc mockMvc;
+	
+	@Autowired
+	private Guest guest;
 	
 	@Autowired
 	private MockHttpSession mockHttpSession;
@@ -71,10 +76,13 @@ public class LoginControllerTest {
     	
     	this.mockMvc.perform(MockMvcRequestBuilders.get("/Login")
     			.param("dspp", DSPP)
-    			.param("service_name", "サービス名称")
+    			.param("service_name", "%E3%83%87%E3%82%A3%E3%82%BA%E3%83%8B%E3%83%BC%E3%82%B7%E3%82%A7%E3%82%A2")
     			.session(mockHttpSession))
     	.andExpect(status().isOk())
     	.andExpect(view().name(is("login/login")));
+    	
+    	assertThat(guest.getServiceName(), is("ディズニーシェア"));
+    	assertThat(guest.getDspp(), is(DSPP));
     }
 	
     @Test

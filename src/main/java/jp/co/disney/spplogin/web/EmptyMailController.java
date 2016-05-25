@@ -80,7 +80,9 @@ public class EmptyMailController {
 		}
 
 		Map<String, String> res = new HashMap<>();
-		res.put("to_address", accountPrefix + accountSeparator + coopKey + "@" + emptyMailDomain);
+		final String toAddress = accountPrefix + accountSeparator + coopKey + "@" + emptyMailDomain;
+		log.debug("会員登録空メール送信先アドレス : {}", toAddress);
+		res.put("to_address", toAddress);
 		return new ResponseEntity<Map<String, String>>(res, HttpStatus.OK);
 	}
 	

@@ -7,15 +7,16 @@ tomcat:
     enabled: true
     port: 8009
 spplogin:
+  base-url: http://dev.ssapi.disney.co.jp/spplogin/
   emptymail:
     domain: dev.msg.disney.co.jp
     session-coop-key:
-      expire: 10
+      expire: 30
       expire-timeunit: MINUTES
   core-webapi:
     proxy:
       enable: false
-    base-url: http://dev.ssapi.disney.co.jp/spplogin/
+    base-url: http://dev.ssopen.disney.co.jp
     port: 80
     cor-901:
       redirect-url: http://dev.ssopen.disney.co.jp/auidauth/SessionKeyInfoUpd/

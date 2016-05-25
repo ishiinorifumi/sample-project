@@ -1,6 +1,8 @@
 package jp.co.disney.spplogin.web;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +91,13 @@ public class LoginController {
 	public String loginOrRegistForm(@RequestParam(required = true) String dspp,
 			@RequestParam(value="service_name", required = true) String serviceName, Model model) {
 		guest.setDspp(dspp);
-		guest.setServiceName(serviceName);
+		
+		try {
+			guest.setServiceName(URLDecoder.decode(serviceName, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		
 		log.debug("dspp: {}", dspp);
 		return "login/login";
 	}

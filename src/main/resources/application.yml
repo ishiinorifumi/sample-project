@@ -34,14 +34,14 @@ spplogin:
   # 空メール関連
   emptymail:
     session-coop-key:
-      prefix: a1-
+      prefix: a1
       expire: 24
       expire-timeunit: HOURS
     domain: mail.disney.jp
-    account-prefix: sslogin-account
+    account-prefix: spplogin-account
     account-separator: _
     auto-reply:
-      from-address: sslogin-register@mail.disney.jp
+      from-address: spplogin-register@mail.disney.jp
       subject: 【ディズニーシェア】新規メンバー登録
   # CORE WebAPI関連
   core-webapi:

@@ -11,6 +11,6 @@ public class RandomHelper {
 	 * @return
 	 */
 	public String randomID() {
-		return UUID.randomUUID().toString();
+		return UUID.randomUUID().toString().replace("-", "");
 	}
 }

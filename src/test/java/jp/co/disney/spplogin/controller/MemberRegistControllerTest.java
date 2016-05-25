@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,6 +39,7 @@ import jp.co.disney.spplogin.Application;
 import jp.co.disney.spplogin.enums.CoreApiErrors;
 import jp.co.disney.spplogin.exception.SppMemberRegisterException;
 import jp.co.disney.spplogin.helper.EmailAddressValidator;
+import jp.co.disney.spplogin.helper.RandomHelper;
 import jp.co.disney.spplogin.service.CoreWebApiService;
 import jp.co.disney.spplogin.vo.SppMemberDetails;
 import jp.co.disney.spplogin.web.MemberRegistController;
@@ -69,6 +69,9 @@ public class MemberRegistControllerTest {
 	@Autowired
 	private Guest guest;
 	
+	@Autowired
+	private RandomHelper randomHelper;
+	
 	@Spy
 	private EmailAddressValidator emailAddressValidator;
 	
@@ -96,7 +99,7 @@ public class MemberRegistControllerTest {
     	wGuest.setBirthDayMonth("10");
     	wGuest.setBirthDayDay("13");
     	wGuest.setMailAddress("test123@gmail.com");
-    	final String id = UUID.randomUUID().toString();
+    	final String id = randomHelper.randomID();
     	redisTemplate.opsForValue().set(id, wGuest.copy());
     	
     	this.mockMvc.perform(MockMvcRequestBuilders.get("/Regist")
